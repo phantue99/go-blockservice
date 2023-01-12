@@ -221,14 +221,14 @@ func (s *blockService) GetBlock(ctx context.Context, c cid.Cid) (blocks.Block, e
 		f = s.getExchange
 	}
 
-	return getBlock(ctx, c, s.blockstore, f, false) // hash security
+	return getBlock(ctx, c, s.blockstore, f) // hash security
 }
 
 func (s *blockService) getExchange() notifiableFetcher {
 	return s.exchange
 }
 
-func getBlock(ctx context.Context, c cid.Cid, bs blockstore.Blockstore, fget func() notifiableFetcher, cache bool) (blocks.Block, error) {
+func getBlock(ctx context.Context, c cid.Cid, bs blockstore.Blockstore, fget func() notifiableFetcher) (blocks.Block, error) {
 	err := verifcid.ValidateCid(c) // hash security
 	if err != nil {
 		return nil, err
@@ -249,8 +249,8 @@ func getBlock(ctx context.Context, c cid.Cid, bs blockstore.Blockstore, fget fun
 		if err != nil {
 			return nil, err
 		}
-		if cache {
-			// also write in the blockstore for caching, inform the exchange that the block is available
+		cache := ctx.Value("cache")
+		if cache != nil && cache == true {
 			err = bs.Put(ctx, blk)
 			if err != nil {
 				return nil, err
@@ -280,10 +280,10 @@ func (s *blockService) GetBlocks(ctx context.Context, ks []cid.Cid) <-chan block
 		f = s.getExchange
 	}
 
-	return getBlocks(ctx, ks, s.blockstore, f, false) // hash security
+	return getBlocks(ctx, ks, s.blockstore, f) // hash security
 }
 
-func getBlocks(ctx context.Context, ks []cid.Cid, bs blockstore.Blockstore, fget func() notifiableFetcher, cache bool) <-chan blocks.Block {
+func getBlocks(ctx context.Context, ks []cid.Cid, bs blockstore.Blockstore, fget func() notifiableFetcher) <-chan blocks.Block {
 	out := make(chan blocks.Block)
 
 	go func() {
@@ -357,7 +357,10 @@ func getBlocks(ctx context.Context, ks []cid.Cid, bs blockstore.Blockstore, fget
 					break batchLoop
 				}
 			}
-			if cache {
+
+			cache := ctx.Value("cache")
+
+			if cache != nil && cache == true {
 				// also write in the blockstore for caching, inform the exchange that the blocks are available
 				err = bs.PutMany(ctx, batch)
 				if err != nil {
@@ -459,7 +462,7 @@ func (s *Session) GetBlock(ctx context.Context, c cid.Cid) (blocks.Block, error)
 	ctx, span := internal.StartSpan(ctx, "Session.GetBlock", trace.WithAttributes(attribute.Stringer("CID", c)))
 	defer span.End()
 
-	return getBlock(ctx, c, s.bs, s.getFetcherFactory(), false) // hash security
+	return getBlock(ctx, c, s.bs, s.getFetcherFactory()) // hash security
 }
 
 // GetBlocks gets blocks in the context of a request session
@@ -467,7 +470,7 @@ func (s *Session) GetBlocks(ctx context.Context, ks []cid.Cid) <-chan blocks.Blo
 	ctx, span := internal.StartSpan(ctx, "Session.GetBlocks")
 	defer span.End()
 
-	return getBlocks(ctx, ks, s.bs, s.getFetcherFactory(), false) // hash security
+	return getBlocks(ctx, ks, s.bs, s.getFetcherFactory()) // hash security
 }
 
 var _ BlockGetter = (*Session)(nil)
