@@ -12,6 +12,7 @@ import (
 	"go.opentelemetry.io/otel/trace"
 
 	blocks "github.com/ipfs/go-block-format"
+	"github.com/ipfs/go-blockservice/tikv"
 	cid "github.com/ipfs/go-cid"
 	blockstore "github.com/ipfs/go-ipfs-blockstore"
 	exchange "github.com/ipfs/go-ipfs-exchange-interface"
@@ -77,6 +78,7 @@ func New(bs blockstore.Blockstore, rem exchange.Interface) BlockService {
 	if rem == nil {
 		logger.Debug("blockservice running in local (offline) mode.")
 	}
+	tikv.InitStore()
 
 	return &blockService{
 		blockstore: bs,
@@ -151,6 +153,11 @@ func (s *blockService) AddBlock(ctx context.Context, o blocks.Block) error {
 	}
 
 	if err := s.blockstore.Put(ctx, o); err != nil {
+		return err
+	}
+
+	err = tikv.Puts(o.Cid().Bytes(), []byte("value1"))
+	if err != nil {
 		return err
 	}
 
