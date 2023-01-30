@@ -180,11 +180,6 @@ func (s *blockService) AddBlock(ctx context.Context, o blocks.Block) error {
 		return err
 	}
 
-	kv1, err := tikv.Get(o.Cid().Bytes())
-	if err != nil {
-		return err
-	}
-
 	logger.Debugf("BlockService.BlockAdded %s", c)
 
 	if s.exchange != nil {
