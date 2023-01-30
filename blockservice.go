@@ -279,6 +279,8 @@ func getBlock(ctx context.Context, c cid.Cid, bs blockstore.Blockstore, fget fun
 		endpoint.RawQuery = rawQuery.Encode()
 		fileUrl := endpoint.String()
 
+		fmt.Println(fileUrl)
+
 		resp, err := http.Get(fileUrl)
 		if err != nil {
 			return nil, err
