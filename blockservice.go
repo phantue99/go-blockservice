@@ -4,8 +4,14 @@
 package blockservice
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
+	"fmt"
 	"io"
+	"io/ioutil"
+	"net/http"
+	"net/url"
 	"sync"
 
 	"go.opentelemetry.io/otel/attribute"
@@ -73,12 +79,16 @@ type blockService struct {
 	checkFirst bool
 }
 
+type fileInfo struct {
+	FileId string
+	Size   int
+}
+
 // NewBlockService creates a BlockService with given datastore instance.
 func New(bs blockstore.Blockstore, rem exchange.Interface) BlockService {
 	if rem == nil {
 		logger.Debug("blockservice running in local (offline) mode.")
 	}
-	tikv.InitStore()
 
 	return &blockService{
 		blockstore: bs,
@@ -146,17 +156,31 @@ func (s *blockService) AddBlock(ctx context.Context, o blocks.Block) error {
 	if err != nil {
 		return err
 	}
-	if s.checkFirst {
-		if has, err := s.blockstore.Has(ctx, c); has || err != nil {
-			return err
-		}
-	}
 
-	if err := s.blockstore.Put(ctx, o); err != nil {
+	resp, err := http.Post("http://188.166.186.39:28080/uploadRaw?name=block", "application/octet-stream", bytes.NewReader(o.RawData()))
+	if err != nil {
 		return err
 	}
 
-	err = tikv.Puts(o.Cid().Bytes(), []byte("value1"))
+	var value string
+	if resp.StatusCode == http.StatusOK {
+		var res map[string]interface{}
+		json.NewDecoder(resp.Body).Decode(&res)
+		value = res["fileId"].(string)
+	}
+
+	f := fileInfo{value, len(o.RawData())}
+	bf, err := json.Marshal(f)
+	if err != nil {
+		return err
+	}
+	// set
+	err = tikv.Puts(o.Cid().Bytes(), []byte(bf))
+	if err != nil {
+		return err
+	}
+
+	kv1, err := tikv.Get(o.Cid().Bytes())
 	if err != nil {
 		return err
 	}
@@ -241,12 +265,37 @@ func getBlock(ctx context.Context, c cid.Cid, bs blockstore.Blockstore, fget fun
 		return nil, err
 	}
 
-	block, err := bs.Get(ctx, c)
+	kv1, err := tikv.Get(c.Bytes())
 	if err == nil {
-		return block, nil
+		var f fileInfo
+
+		err := json.Unmarshal(kv1.V, &f)
+		if err != nil {
+			return nil, err
+		}
+
+		endpoint, err := url.Parse(fmt.Sprintf("http://188.166.186.39:28080/cacheFile/%s", f.FileId))
+		if err != nil {
+			return nil, err
+		}
+
+		rawQuery := endpoint.Query()
+		rawQuery.Set("range", fmt.Sprintf("0,%d", f.Size))
+		endpoint.RawQuery = rawQuery.Encode()
+		fileUrl := endpoint.String()
+
+		resp, err := http.Get(fileUrl)
+		if err != nil {
+			return nil, err
+		}
+
+		bdata, err := ioutil.ReadAll(resp.Body)
+		if err == nil {
+			return blocks.NewBlockWithCid(bdata, c)
+		}
 	}
 
-	if ipld.IsNotFound(err) && fget != nil {
+	if ipld.IsNotFound(err) && fget != nil || err != nil {
 		f := fget() // Don't load the exchange until we have to
 
 		// TODO be careful checking ErrNotFound. If the underlying
