@@ -157,6 +157,11 @@ func (s *blockService) AddBlock(ctx context.Context, o blocks.Block) error {
 		return err
 	}
 
+	_, err = tikv.Get(c.Bytes())
+	if (err == nil) {
+		return nil
+	}
+
 	resp, err := http.Post("http://188.166.186.39:28080/uploadRaw?name=block", "application/octet-stream", bytes.NewReader(o.RawData()))
 	if err != nil {
 		return err
