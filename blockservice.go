@@ -30,6 +30,7 @@ import (
 )
 
 var logger = logging.Logger("blockservice")
+var uploader string
 
 // BlockGetter is the common interface shared between blockservice sessions and
 // the blockservice.
@@ -82,6 +83,12 @@ type blockService struct {
 type fileInfo struct {
 	FileId string
 	Size   int
+}
+
+func InitUploader(ip string) {
+	if ip != "" {
+		uploader = ip
+	}
 }
 
 // NewBlockService creates a BlockService with given datastore instance.
@@ -157,12 +164,14 @@ func (s *blockService) AddBlock(ctx context.Context, o blocks.Block) error {
 		return err
 	}
 
-	_, err = tikv.Get(c.Bytes())
-	if (err == nil) {
-		return nil
+	if s.checkFirst {
+		_, err = tikv.Get(c.Bytes())
+		if err == nil {
+			return nil
+		}
 	}
 
-	resp, err := http.Post("http://188.166.186.39:28080/uploadRaw?name=block", "application/octet-stream", bytes.NewReader(o.RawData()))
+	resp, err := http.Post(fmt.Sprintf("%s/uploadRaw?name=block", uploader), "application/octet-stream", bytes.NewReader(o.RawData()))
 	if err != nil {
 		return err
 	}
@@ -211,11 +220,10 @@ func (s *blockService) AddBlocks(ctx context.Context, bs []blocks.Block) error {
 	if s.checkFirst {
 		toput = make([]blocks.Block, 0, len(bs))
 		for _, b := range bs {
-			has, err := s.blockstore.Has(ctx, b.Cid())
-			if err != nil {
-				return err
-			}
-			if !has {
+			_, err := tikv.Get(b.Cid().Bytes())
+			if err == nil {
+				return nil
+			} else {
 				toput = append(toput, b)
 			}
 		}
@@ -226,10 +234,34 @@ func (s *blockService) AddBlocks(ctx context.Context, bs []blocks.Block) error {
 	if len(toput) == 0 {
 		return nil
 	}
+	for _, b := range toput {
+		_, err := tikv.Get(b.Cid().Bytes())
+		if err == nil {
+			continue
+		}
 
-	err := s.blockstore.PutMany(ctx, toput)
-	if err != nil {
-		return err
+		resp, err := http.Post(fmt.Sprintf("%s/uploadRaw?name=block", uploader), "application/octet-stream", bytes.NewReader(b.RawData()))
+		if err != nil {
+			return err
+		}
+
+		var value string
+		if resp.StatusCode == http.StatusOK {
+			var res map[string]interface{}
+			json.NewDecoder(resp.Body).Decode(&res)
+			value = res["fileId"].(string)
+		}
+
+		f := fileInfo{value, len(b.RawData())}
+		bf, err := json.Marshal(f)
+		if err != nil {
+			return err
+		}
+		// set
+		err = tikv.Puts(b.Cid().Bytes(), []byte(bf))
+		if err != nil {
+			return err
+		}
 	}
 
 	if s.exchange != nil {
@@ -274,7 +306,7 @@ func getBlock(ctx context.Context, c cid.Cid, bs blockstore.Blockstore, fget fun
 			return nil, err
 		}
 
-		endpoint, err := url.Parse(fmt.Sprintf("http://188.166.186.39:28080/cacheFile/%s", f.FileId))
+		endpoint, err := url.Parse(fmt.Sprintf("%s/cacheFile/%s", uploader, f.FileId))
 		if err != nil {
 			return nil, err
 		}
@@ -370,7 +402,7 @@ func getBlocks(ctx context.Context, ks []cid.Cid, bs blockstore.Blockstore, fget
 
 		var misses []cid.Cid
 		for _, c := range ks {
-			hit, err := bs.Get(ctx, c)
+			hit, err := getBlockCdn(ctx, c)
 			if err != nil {
 				misses = append(misses, c)
 				continue
@@ -513,6 +545,40 @@ func (s *Session) getFetcherFactory() func() notifiableFetcher {
 		return s.getExchange
 	}
 	return nil
+}
+func getBlockCdn(ctx context.Context, c cid.Cid) (blocks.Block, error) {
+	kv1, err := tikv.Get(c.Bytes())
+	if err == nil {
+		var f fileInfo
+
+		err := json.Unmarshal(kv1.V, &f)
+		if err != nil {
+			return nil, err
+		}
+
+		endpoint, err := url.Parse(fmt.Sprintf("%s/cacheFile/%s", uploader, f.FileId))
+		if err != nil {
+			return nil, err
+		}
+
+		rawQuery := endpoint.Query()
+		rawQuery.Set("range", fmt.Sprintf("0,%d", f.Size))
+		endpoint.RawQuery = rawQuery.Encode()
+		fileUrl := endpoint.String()
+
+		fmt.Println(fileUrl)
+
+		resp, err := http.Get(fileUrl)
+		if err != nil {
+			return nil, err
+		}
+
+		bdata, err := ioutil.ReadAll(resp.Body)
+		if err == nil {
+			return blocks.NewBlockWithCid(bdata, c)
+		}
+	} 
+	return nil, err
 }
 
 // GetBlock gets a block in the context of a request session
