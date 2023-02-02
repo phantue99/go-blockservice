@@ -287,6 +287,13 @@ func (s *blockService) GetBlock(ctx context.Context, c cid.Cid) (blocks.Block, e
 	return getBlock(ctx, c, s.blockstore, f) // hash security
 }
 
+func (s *blockService) GetUploader() (string, error) {
+	if uploader != "" {
+		return uploader, nil
+	} 
+	return "", nil
+}
+
 func (s *blockService) getExchange() notifiableFetcher {
 	return s.exchange
 }
