@@ -176,28 +176,30 @@ func (s *blockService) AddBlock(ctx context.Context, o blocks.Block) error {
 		return err
 	}
 
-	resp, err := http.Post(fmt.Sprintf("%s/uploadRaw?name=%s", uploader, hash), "application/octet-stream", bytes.NewReader(o.RawData()))
-	if err != nil {
-		return err
-	}
+    resp, err := uploadRequest(hash, o.RawData())
+    if err != nil {
+        return fmt.Errorf("failed to post raw data: %w", err)
+    }
+    defer resp.Body.Close()
 
 	var value string
 	if resp.StatusCode == http.StatusOK {
 		var res map[string]interface{}
-		json.NewDecoder(resp.Body).Decode(&res)
+        if err := json.NewDecoder(resp.Body).Decode(&res); err != nil {
+            return fmt.Errorf("failed to decode response body: %w", err)
+        }
 		value = res["fileId"].(string)
 	}
 
 	f := fileInfo{value, len(o.RawData())}
 	bf, err := json.Marshal(f)
-	if err != nil {
-		return err
-	}
+    if err != nil {
+        return fmt.Errorf("failed to marshal `fileInfo`: %w", err)
+    }
 	// set
-	err = tikv.Puts(o.Cid().Bytes(), []byte(bf))
-	if err != nil {
-		return err
-	}
+    if err := tikv.Puts(c.Bytes(), []byte(bf)); err != nil {
+        return fmt.Errorf("failed to put data in TiKV: %w", err)
+    }
 
 	logger.Debugf("BlockService.BlockAdded %s", c)
 
@@ -239,47 +241,84 @@ func (s *blockService) AddBlocks(ctx context.Context, bs []blocks.Block) error {
 	if len(toput) == 0 {
 		return nil
 	}
+
+	var wg sync.WaitGroup
+    var mu sync.Mutex // Protect err to avoid data race.
+	errc := make(chan error, len(toput))
+
 	for _, b := range toput {
-		_, err := tikv.Get(b.Cid().Bytes())
-		if err == nil {
-			continue
-		}
+		wg.Add(1)
 
-		hash, err := internal.GetHashFromCidString(b.String())
-		if err != nil {
-			return err
-		}
-	
-		resp, err := http.Post(fmt.Sprintf("%s/uploadRaw?name=%s", uploader, hash), "application/octet-stream", bytes.NewReader(b.RawData()))
-		if err != nil {
-			return err
-		}
+		go func(b blocks.Block) {
+			defer wg.Done()
+			_, err := tikv.Get(b.Cid().Bytes())
+			if err == nil {
+				return
+			}
 
-		var value string
-		if resp.StatusCode == http.StatusOK {
-			var res map[string]interface{}
-			json.NewDecoder(resp.Body).Decode(&res)
-			value = res["fileId"].(string)
-		}
+			hash, err := internal.GetHashFromCidString(b.String())
+			if err != nil {
+                mu.Lock()
+                errc <- err
+                mu.Unlock()
+				return 
+			}
 
-		f := fileInfo{value, len(b.RawData())}
-		bf, err := json.Marshal(f)
-		if err != nil {
-			return err
-		}
-		// set
-		err = tikv.Puts(b.Cid().Bytes(), []byte(bf))
-		if err != nil {
-			return err
-		}
+			resp, err := http.Post(fmt.Sprintf("%s/uploadRaw?name=%s", uploader, hash), "application/octet-stream", bytes.NewReader(b.RawData()))
+			if err != nil {
+                mu.Lock()
+                errc <- err
+                mu.Unlock()
+				return
+			}
+
+			var value string
+			if resp.StatusCode == http.StatusOK {
+				var res map[string]interface{}
+				json.NewDecoder(resp.Body).Decode(&res)
+				value = res["fileId"].(string)
+			}
+
+			f := fileInfo{value, len(b.RawData())}
+			bf, err := json.Marshal(f)
+			if err != nil {
+                mu.Lock()
+                errc <- err
+                mu.Unlock()
+				return
+			}
+			// set
+			err = tikv.Puts(b.Cid().Bytes(), []byte(bf))
+			if err != nil {
+                mu.Lock()
+                errc <- err
+                mu.Unlock()
+				return
+			}
+		}(b)
 	}
+    go func() {
+        wg.Wait()
+        close(errc)
+    }()
 
-	if s.exchange != nil {
-		logger.Debugf("BlockService.BlockAdded %d blocks", len(toput))
-		if err := s.exchange.NotifyNewBlocks(ctx, toput...); err != nil {
-			logger.Errorf("NotifyNewBlocks: %s", err.Error())
-		}
-	}
+    var errors []error
+    for err := range errc {
+        if err != nil {
+            errors = append(errors, err)
+        }
+    }
+
+    if len(errors) > 0 {
+        return fmt.Errorf("%d errors occurred during upload: %v", len(errors), errors)
+    }
+
+    if s.exchange != nil {
+        logger.Debugf("BlockService.BlockAdded %d blocks", len(toput))
+        if err := s.exchange.NotifyNewBlocks(ctx, toput...); err != nil {
+            logger.Errorf("NotifyNewBlocks: %s", err.Error())
+        }
+    }
 	return nil
 }
 
@@ -300,7 +339,7 @@ func (s *blockService) GetBlock(ctx context.Context, c cid.Cid) (blocks.Block, e
 func (s *blockService) GetUploader() (string, error) {
 	if uploader != "" {
 		return uploader, nil
-	} 
+	}
 	return "", nil
 }
 
@@ -315,7 +354,7 @@ func getBlock(ctx context.Context, c cid.Cid, bs blockstore.Blockstore, fget fun
 	}
 
 	kv1, err := tikv.Get(c.Bytes())
-	
+
 	if err == nil {
 		var f fileInfo
 
@@ -328,7 +367,7 @@ func getBlock(ctx context.Context, c cid.Cid, bs blockstore.Blockstore, fget fun
 		if err != nil {
 			return nil, err
 		}
-		fmt.Println(f.FileId, " ",f.Size, c.String())
+		fmt.Println(f.FileId, " ", f.Size, c.String())
 
 		rawQuery := endpoint.Query()
 		rawQuery.Set("range", fmt.Sprintf("0,%d", f.Size))
@@ -580,7 +619,7 @@ func getBlockCdn(ctx context.Context, c cid.Cid) (blocks.Block, error) {
 		if err != nil {
 			return nil, err
 		}
-		fmt.Println("getBlocks ",f.FileId, " ",f.Size)
+		fmt.Println("getBlocks ", f.FileId, " ", f.Size)
 
 		rawQuery := endpoint.Query()
 		rawQuery.Set("range", fmt.Sprintf("0,%d", f.Size))
@@ -598,7 +637,7 @@ func getBlockCdn(ctx context.Context, c cid.Cid) (blocks.Block, error) {
 		if err == nil {
 			return blocks.NewBlockWithCid(bdata, c)
 		}
-	} 
+	}
 	return nil, err
 }
 
@@ -616,6 +655,11 @@ func (s *Session) GetBlocks(ctx context.Context, ks []cid.Cid) <-chan blocks.Blo
 	defer span.End()
 
 	return getBlocks(ctx, ks, s.bs, s.getFetcherFactory()) // hash security
+}
+
+func uploadRequest(hash string, rawData []byte) (*http.Response, error) {
+    url := fmt.Sprintf("%s/uploadRaw?name=%s", uploader, hash)
+    return http.Post(url, "application/octet-stream", bytes.NewReader(rawData))
 }
 
 var _ BlockGetter = (*Session)(nil)
