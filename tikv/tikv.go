@@ -24,11 +24,17 @@ var (
 )
 
 // Init initializes information.
-func InitStore() {
+func InitStore(tikvStore string) {
 	var err error
-	client, err = txnkv.NewClient([]string{*pdAddr})
+	addrs := []string{*pdAddr}
+  
+	if tikvStore != "" {
+	  addrs = []string{tikvStore}
+	}
+  
+	client, err = txnkv.NewClient(addrs)
 	if err != nil {
-		panic(err)
+	  panic(err)
 	}
 }
 
