@@ -171,7 +171,12 @@ func (s *blockService) AddBlock(ctx context.Context, o blocks.Block) error {
 		}
 	}
 
-	resp, err := http.Post(fmt.Sprintf("%s/uploadRaw?name=block", uploader), "application/octet-stream", bytes.NewReader(o.RawData()))
+	hash, err := internal.GetHashFromCidString(c.String())
+	if err != nil {
+		return err
+	}
+
+	resp, err := http.Post(fmt.Sprintf("%s/uploadRaw?name=%s", uploader, hash), "application/octet-stream", bytes.NewReader(o.RawData()))
 	if err != nil {
 		return err
 	}
@@ -240,7 +245,12 @@ func (s *blockService) AddBlocks(ctx context.Context, bs []blocks.Block) error {
 			continue
 		}
 
-		resp, err := http.Post(fmt.Sprintf("%s/uploadRaw?name=block", uploader), "application/octet-stream", bytes.NewReader(b.RawData()))
+		hash, err := internal.GetHashFromCidString(b.String())
+		if err != nil {
+			return err
+		}
+	
+		resp, err := http.Post(fmt.Sprintf("%s/uploadRaw?name=%s", uploader, hash), "application/octet-stream", bytes.NewReader(b.RawData()))
 		if err != nil {
 			return err
 		}
@@ -305,6 +315,7 @@ func getBlock(ctx context.Context, c cid.Cid, bs blockstore.Blockstore, fget fun
 	}
 
 	kv1, err := tikv.Get(c.Bytes())
+	
 	if err == nil {
 		var f fileInfo
 
@@ -317,6 +328,7 @@ func getBlock(ctx context.Context, c cid.Cid, bs blockstore.Blockstore, fget fun
 		if err != nil {
 			return nil, err
 		}
+		fmt.Println(f.FileId, " ",f.Size, c.String())
 
 		rawQuery := endpoint.Query()
 		rawQuery.Set("range", fmt.Sprintf("0,%d", f.Size))
@@ -332,6 +344,7 @@ func getBlock(ctx context.Context, c cid.Cid, bs blockstore.Blockstore, fget fun
 
 		bdata, err := ioutil.ReadAll(resp.Body)
 		if err == nil {
+			//TODO: call api add bandwidth user
 			return blocks.NewBlockWithCid(bdata, c)
 		}
 	}
@@ -567,6 +580,7 @@ func getBlockCdn(ctx context.Context, c cid.Cid) (blocks.Block, error) {
 		if err != nil {
 			return nil, err
 		}
+		fmt.Println("getBlocks ",f.FileId, " ",f.Size)
 
 		rawQuery := endpoint.Query()
 		rawQuery.Set("range", fmt.Sprintf("0,%d", f.Size))
