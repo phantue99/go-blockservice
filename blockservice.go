@@ -16,6 +16,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync"
 
 	"go.opentelemetry.io/otel/attribute"
@@ -86,6 +87,12 @@ type blockService struct {
 type fileRecord struct {
 	FileRecordID string
 	Size         uint64
+}
+
+type fileInfo struct {
+	FileRecordID string
+	Size         uint64
+	Offset       uint64
 }
 
 var (
@@ -191,7 +198,7 @@ type File struct {
 	UncompressedSize   uint32 `json:"UncompressedSize"`
 	CompressedSize64   uint64 `json:"CompressedSize64"`
 	UncompressedSize64 uint64 `json:"UncompressedSize64"`
-	Offset             uint64    `json:"Offset"`
+	Offset             uint64 `json:"Offset"`
 }
 
 // AddBlock adds a particular block to the service, Putting it into the datastore.
@@ -201,14 +208,20 @@ func (s *blockService) AddBlock(ctx context.Context, o blocks.Block) error {
 
 	userID, ok := ctx.Value("userID").(string)
 	if !ok {
-		return fmt.Errorf("userID not found or has invalid type")
+		// return fmt.Errorf("userID not found or has invalid type")
 	}
-	userKV, err := tikv.Get([]byte(userID))
 
 	var fr fileRecord
 
-	if err := json.Unmarshal(userKV.V, &fr); err != nil {
-		return err
+	if userID != "" {
+		userKV, err := tikv.Get([]byte(userID))
+		if err != nil {
+			return nil
+		} else {
+			if err := json.Unmarshal(userKV.V, &fr); err != nil {
+				return err
+			}
+		}
 	}
 
 	c := o.Cid()
@@ -218,7 +231,7 @@ func (s *blockService) AddBlock(ctx context.Context, o blocks.Block) error {
 	}
 
 	if s.checkFirst {
-		_, err = tikv.Get(c.Hash())
+		_, err := tikv.Get(c.Hash())
 		if err == nil {
 			return nil
 		}
@@ -229,7 +242,7 @@ func (s *blockService) AddBlock(ctx context.Context, o blocks.Block) error {
 		return err
 	}
 	// Create a temporary file with the name being the hash of the CID
-	tmpFile, err := ioutil.TempFile("", hash)
+	tmpFile, err := os.Create(hash)
 	if err != nil {
 		return fmt.Errorf("failed to create temporary file: %w", err)
 	}
@@ -244,15 +257,18 @@ func (s *blockService) AddBlock(ctx context.Context, o blocks.Block) error {
 		return fmt.Errorf("failed to close temporary file: %w", err)
 	}
 
-	var fileRecordID string
-	var lastSize uint64
-	if fr.FileRecordID != "" || fr.Size > 100*1024*1024 {
-		fileRecordID, lastSize, err = s.uploadFile(tmpFile.Name())
+	var (
+		fileRecordID = fr.FileRecordID
+		lastSize     uint64
+		files        []File
+	)
+	if fr.FileRecordID == "" || fr.Size > 100*1024*1024 {
+		fileRecordID, files, lastSize, err = s.uploadFiles([]string{tmpFile.Name()})
 		if err != nil {
 			return fmt.Errorf("failed to upload file and get file record ID: %w", err)
 		}
 	} else {
-		_, lastSize, err = s.uploadFiles([]string{tmpFile.Name()}, fr.FileRecordID)
+		files, lastSize, err = s.appendFiles([]string{tmpFile.Name()}, fileRecordID)
 		if err != nil {
 			return fmt.Errorf("failed to upload file : %w", err)
 		}
@@ -267,6 +283,20 @@ func (s *blockService) AddBlock(ctx context.Context, o blocks.Block) error {
 		return fmt.Errorf("failed to put data in TiKV: %w", err)
 	}
 
+	for _, f := range files {
+		if strings.Contains(f.Name, o.Cid().Hash().String()) {
+			fInfo := fileInfo{fileRecordID, f.CompressedSize64, f.Offset}
+			fInfoBytes, err := json.Marshal(fInfo)
+			if err != nil {
+				return err
+			}
+			if err := tikv.Puts(o.Cid().Hash(), []byte(fInfoBytes)); err != nil {
+				return err
+			}
+			break
+		}
+	}
+
 	logger.Debugf("BlockService.BlockAdded %s", c)
 
 	if s.exchange != nil {
@@ -277,35 +307,39 @@ func (s *blockService) AddBlock(ctx context.Context, o blocks.Block) error {
 
 	return nil
 }
-func (s *blockService) uploadFile(filePath string) (string, uint64, error) {
-	file, err := os.Open(filePath)
-	if err != nil {
-		return "", 0, fmt.Errorf("failed to open file %s: %w", filePath, err)
-	}
-	defer file.Close()
-
+func (s *blockService) uploadFiles(files []string) (string, []File, uint64, error) {
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
-	part, err := writer.CreateFormFile("file", filepath.Base(filePath))
-	if err != nil {
-		return "", 0, fmt.Errorf("failed to create form file: %w", err)
+	// Iterate over files and add them as form parts
+	for _, file := range files {
+		part, err := writer.CreateFormFile("file", filepath.Base(file))
+		if err != nil {
+			return "", nil, 0, fmt.Errorf("failed to create form file: %w", err)
+		}
+		f, err := os.Open(file)
+		if err != nil {
+			return "", nil, 0, fmt.Errorf("failed to open file %s: %w", file, err)
+		}
+		defer f.Close()
+		if _, err = io.Copy(part, f); err != nil {
+			return "", nil, 0, fmt.Errorf("failed to copy file content: %w", err)
+		}
 	}
-	if _, err = io.Copy(part, file); err != nil {
-		return "", 0, fmt.Errorf("failed to copy file content: %w", err)
-	}
-	if err = writer.Close(); err != nil {
-		return "", 0, fmt.Errorf("failed to close multipart writer: %w", err)
+
+	// Close the multipart form writer
+	if err := writer.Close(); err != nil {
+		return "", nil, 0, fmt.Errorf("failed to close multipart writer: %w", err)
 	}
 
 	req, err := http.NewRequest("POST", "http://144.126.243.124:38080/packUpload", body)
 	if err != nil {
-		return "", 0, fmt.Errorf("failed to create HTTP request: %w", err)
+		return "", nil, 0, fmt.Errorf("failed to create HTTP request: %w", err)
 	}
 	req.Header.Add("Content-Type", writer.FormDataContentType())
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		return "", 0, fmt.Errorf("failed to post raw data: %w", err)
+		return "", nil, 0, fmt.Errorf("failed to post raw data: %w", err)
 	}
 	defer resp.Body.Close()
 	type FileRecord struct {
@@ -326,14 +360,14 @@ func (s *blockService) uploadFile(filePath string) (string, uint64, error) {
 	)
 	if resp.StatusCode == http.StatusOK {
 		if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
-			return "", 0, fmt.Errorf("failed to decode response body: %w", err)
+			return "", nil, 0, fmt.Errorf("failed to decode response body: %w", err)
 		}
 		fileRecordID = response.FileRecord.ID
-		size = response.ZipReader.File[0].Offset + response.ZipReader.File[0].UncompressedSize64
+		size = response.ZipReader.File[len(files)-1].Offset + response.ZipReader.File[len(files)-1].UncompressedSize64
 	}
-	return fileRecordID, size, nil
+	return fileRecordID, response.ZipReader.File, size, nil
 }
-func (s *blockService) uploadFiles(files []string, fileRecordId string) ([]File, uint64, error) {
+func (s *blockService) appendFiles(files []string, fileRecordId string) ([]File, uint64, error) {
 	// Create new multipart form writer
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
@@ -397,7 +431,7 @@ func (s *blockService) uploadFiles(files []string, fileRecordId string) ([]File,
 
 	}
 
-	return  response.File, lastSize, nil
+	return response.File, lastSize, nil
 }
 
 type TikvBlock struct {
@@ -405,25 +439,29 @@ type TikvBlock struct {
 	FileRecordID string
 	Range        string
 }
+var lock = sync.RWMutex{}
 
 func (s *blockService) AddBlocks(ctx context.Context, bs []blocks.Block) error {
+	lock.Lock()
+	defer lock.Unlock()
 	ctx, span := internal.StartSpan(ctx, "blockService.AddBlocks")
 	defer span.End()
 
 	userID, ok := ctx.Value("userID").(string)
 	if !ok {
-		return fmt.Errorf("userID not found or has invalid type")
-	}
 
-	userKV, err := tikv.Get([]byte(userID))
-	if err != nil {
-		return err
 	}
 
 	var fr fileRecord
-
-	if err := json.Unmarshal(userKV.V, &fr); err != nil {
-		return err
+	if userID != "" {
+		userKV, err := tikv.Get([]byte(userID))
+		if err != nil {
+			return nil
+		} else {
+			if err := json.Unmarshal(userKV.V, &fr); err != nil {
+				return err
+			}
+		}
 	}
 
 	// hash security
@@ -454,7 +492,7 @@ func (s *blockService) AddBlocks(ctx context.Context, bs []blocks.Block) error {
 
 	tempFiles := make([]string, len(toput))
 	for i, b := range toput {
-		tempFile, err := ioutil.TempFile("", b.Cid().Hash().String())
+		tempFile, err := os.Create(b.Cid().Hash().String())
 		if err != nil {
 			return err
 		}
@@ -466,19 +504,47 @@ func (s *blockService) AddBlocks(ctx context.Context, bs []blocks.Block) error {
 		tempFiles[i] = tempFile.Name()
 	}
 
-	files, _, err := s.uploadFiles(tempFiles, fr.FileRecordID)
-	if err != nil {
-		return err
-	}
-
-	for i, f := range files {
-		fInfo := fileRecord{fr.FileRecordID, f.CompressedSize64 + f.Offset}
-		fInfoBytes, err := json.Marshal(fInfo)
+	var (
+		fileRecordID = fr.FileRecordID
+		lastSize     uint64
+		err          error
+		files        []File
+	)
+	if fr.FileRecordID == "" || fr.Size > 100*1024*1024 {
+		fileRecordID, files, lastSize, err = s.uploadFiles(tempFiles)
+		if err != nil {
+			return fmt.Errorf("failed to upload file and get file record ID: %w", err)
+		}
+	} else {
+		files, lastSize, err = s.appendFiles(tempFiles, fileRecordID)
 		if err != nil {
 			return err
 		}
-		if err := tikv.Puts(toput[i].Cid().Hash(), []byte(fInfoBytes)); err != nil {
-			return err
+	}
+
+	if userID != "" {
+		f := fileRecord{fileRecordID, lastSize}
+		bf, err := json.Marshal(f)
+		if err != nil {
+			return fmt.Errorf("failed to marshal `fileInfo`: %w", err)
+		}
+		if err := tikv.Puts([]byte(userID), []byte(bf)); err != nil {
+			return fmt.Errorf("failed to put data in TiKV: %w", err)
+		}
+	}
+
+	for _, f := range files {
+		for _, b := range toput {
+			if strings.Contains(f.Name, b.Cid().Hash().String()) {
+				fInfo := fileInfo{fileRecordID, f.CompressedSize64, f.Offset}
+				fInfoBytes, err := json.Marshal(fInfo)
+				if err != nil {
+					return err
+				}
+				if err := tikv.Puts(b.Cid().Hash(), []byte(fInfoBytes)); err != nil {
+					return err
+				}
+			}
 		}
 	}
 
@@ -525,7 +591,7 @@ func getBlock(ctx context.Context, c cid.Cid, bs blockstore.Blockstore, fget fun
 	kv1, err := tikv.Get(c.Hash())
 
 	if err == nil {
-		var f fileRecord
+		var f fileInfo
 
 		if err := json.Unmarshal(kv1.V, &f); err != nil {
 			return nil, err
@@ -535,10 +601,9 @@ func getBlock(ctx context.Context, c cid.Cid, bs blockstore.Blockstore, fget fun
 		if err != nil {
 			return nil, err
 		}
-		fmt.Println(f.FileRecordID, " ", f.Size, c.String())
 
 		rawQuery := endpoint.Query()
-		rawQuery.Set("range", fmt.Sprintf("0,%d", f.Size))
+		rawQuery.Set("range", fmt.Sprintf("%d,%d", f.Offset, f.Size))
 		endpoint.RawQuery = rawQuery.Encode()
 		fileUrl := endpoint.String()
 
@@ -801,7 +866,7 @@ func (s *Session) getFetcherFactory() func() notifiableFetcher {
 func getBlockCdn(ctx context.Context, c cid.Cid) (blocks.Block, error) {
 	kv1, err := tikv.Get(c.Hash())
 	if err == nil {
-		var f fileRecord
+		var f fileInfo
 
 		err := json.Unmarshal(kv1.V, &f)
 		if err != nil {
@@ -812,14 +877,11 @@ func getBlockCdn(ctx context.Context, c cid.Cid) (blocks.Block, error) {
 		if err != nil {
 			return nil, err
 		}
-		fmt.Println("getBlocks ", f.FileRecordID, " ", f.Size)
 
 		rawQuery := endpoint.Query()
-		rawQuery.Set("range", fmt.Sprintf("0,%d", f.Size))
+		rawQuery.Set("range", fmt.Sprintf("%d,%d", f.Offset, f.Size))
 		endpoint.RawQuery = rawQuery.Encode()
 		fileUrl := endpoint.String()
-
-		fmt.Println(fileUrl)
 
 		resp, err := http.Get(fileUrl)
 		if err != nil {
