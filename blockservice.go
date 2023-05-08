@@ -109,11 +109,7 @@ func InitBlockService(uploaderURL, pinningServiceURL, _apiKey string) error {
 		pinningService = pinningServiceURL
 	}
 	if _apiKey != "" {
-		decodedApiKey, err := internal.Decode(_apiKey)
-		if err != nil {
-			return errors.New("error: invalid api key")
-		}
-		apiKey = decodedApiKey
+		apiKey = _apiKey
 	}
 
 	// Return an error if any of the URLs is empty.
@@ -629,20 +625,7 @@ func getBlock(ctx context.Context, c cid.Cid, bs blockstore.Blockstore, fget fun
 		if err != nil {
 			logger.Debugf("GetHashFromCidString Error %v", err)
 		}
-		apiUrl := fmt.Sprintf("%s/api/hourlyUsage/bandwidth/", pinningService)
-		reqBody, _ := json.Marshal(map[string]interface{}{
-			"amount": f.Size,
-			"cid":    hash,
-		})
-		client := &http.Client{}
-		req, _ := http.NewRequest("POST", apiUrl, bytes.NewBuffer(reqBody))
-		req.Header.Set("blockservice-API-Key", apiKey)
-		req.Header.Set("Content-Type", "application/json")
-
-		_, err = client.Do(req)
-		if err != nil {
-			logger.Debugf("Failed to send Bandwidth Usage Error %v", err)
-		}
+		addBandwidthUsage(f.Size, hash)
 		return blocks.NewBlockWithCid(bdata, c)
 	}
 
@@ -887,6 +870,11 @@ func getBlockCdn(ctx context.Context, c cid.Cid) (blocks.Block, error) {
 		if err != nil {
 			return nil, err
 		}
+		hash, err := internal.GetHashStringFromCid(c.String())
+		if err != nil {
+			logger.Debugf("GetHashFromCidString Error %v", err)
+		}
+		addBandwidthUsage(f.Size, hash)
 
 		bdata, err := ioutil.ReadAll(resp.Body)
 		if err == nil {
@@ -895,7 +883,23 @@ func getBlockCdn(ctx context.Context, c cid.Cid) (blocks.Block, error) {
 	}
 	return nil, err
 }
-
+func addBandwidthUsage(fileSize uint64, hash string) error {
+	apiUrl := fmt.Sprintf("%s/api/hourlyUsage/bandwidth/", pinningService)
+    reqBody, _ := json.Marshal(map[string]interface{}{
+        "amount": fileSize,
+        "cid":    hash,
+    })
+    client := &http.Client{}
+    req, _ := http.NewRequest("POST", apiUrl, bytes.NewBuffer(reqBody))
+    req.Header.Set("blockservice-API-Key", apiKey)
+    req.Header.Set("Content-Type", "application/json")
+    _, err := client.Do(req)
+    if err != nil {
+        logger.Debugf("Failed to send Bandwidth Usage Error %v", err)
+        return err
+    }
+    return nil
+}
 // GetBlock gets a block in the context of a request session
 func (s *Session) GetBlock(ctx context.Context, c cid.Cid) (blocks.Block, error) {
 	ctx, span := internal.StartSpan(ctx, "Session.GetBlock", trace.WithAttributes(attribute.Stringer("CID", c)))
