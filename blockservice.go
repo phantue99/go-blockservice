@@ -96,12 +96,13 @@ type fileInfo struct {
 }
 
 var (
-	uploader       string
-	pinningService string
-	apiKey         string
+	uploader           string
+	pinningService     string
+	apiKey             string
+	isDedicatedGateway bool
 )
 
-func InitBlockService(uploaderURL, pinningServiceURL, _apiKey string) error {
+func InitBlockService(uploaderURL, pinningServiceURL, _apiKey string, _isDedicatedGateway bool) error {
 	if uploaderURL != "" {
 		uploader = uploaderURL
 	}
@@ -111,6 +112,7 @@ func InitBlockService(uploaderURL, pinningServiceURL, _apiKey string) error {
 	if _apiKey != "" {
 		apiKey = _apiKey
 	}
+	isDedicatedGateway = _isDedicatedGateway
 
 	// Return an error if any of the URLs is empty.
 	if uploader == "" || pinningService == "" || apiKey == "" {
@@ -202,13 +204,8 @@ func (s *blockService) AddBlock(ctx context.Context, o blocks.Block) error {
 	ctx, span := internal.StartSpan(ctx, "blockService.AddBlock")
 	defer span.End()
 
-	userID, ok := ctx.Value("userID").(string)
-	if !ok {
-		// return fmt.Errorf("userID not found or has invalid type")
-	}
-
 	var fr fileRecord
-
+	userID, _ := ctx.Value("userID").(string)
 	if userID != "" {
 		userKV, err := tikv.Get([]byte(userID))
 		if err != nil {
@@ -327,7 +324,7 @@ func (s *blockService) uploadFiles(files []string) (string, []File, uint64, erro
 		return "", nil, 0, fmt.Errorf("failed to close multipart writer: %w", err)
 	}
 
-	req, err := http.NewRequest("POST", "http://144.126.243.124:38080/packUpload", body)
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s/packUpload", uploader), body)
 	if err != nil {
 		return "", nil, 0, fmt.Errorf("failed to create HTTP request: %w", err)
 	}
@@ -390,7 +387,7 @@ func (s *blockService) appendFiles(files []string, fileRecordId string) ([]File,
 	}
 
 	// Create new HTTP request and set headers
-	req, err := http.NewRequest("POST", "http://144.126.243.124:38080/zipAction", body)
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s/zipAction", uploader), body)
 	if err != nil {
 		return nil, 0, fmt.Errorf("failed to create HTTP request: %w", err)
 	}
@@ -435,6 +432,7 @@ type TikvBlock struct {
 	FileRecordID string
 	Range        string
 }
+
 var lock = sync.RWMutex{}
 
 func (s *blockService) AddBlocks(ctx context.Context, bs []blocks.Block) error {
@@ -443,12 +441,9 @@ func (s *blockService) AddBlocks(ctx context.Context, bs []blocks.Block) error {
 	ctx, span := internal.StartSpan(ctx, "blockService.AddBlocks")
 	defer span.End()
 
-	userID, ok := ctx.Value("userID").(string)
-	if !ok {
-
-	}
-
 	var fr fileRecord
+
+	userID, _ := ctx.Value("userID").(string)
 	if userID != "" {
 		userKV, err := tikv.Get([]byte(userID))
 		if err != nil {
@@ -625,7 +620,10 @@ func getBlock(ctx context.Context, c cid.Cid, bs blockstore.Blockstore, fget fun
 		if err != nil {
 			logger.Debugf("GetHashFromCidString Error %v", err)
 		}
-		addBandwidthUsage(f.Size, hash)
+		if isDedicatedGateway {
+			addBandwidthUsage(f.Size, hash)
+		}
+
 		return blocks.NewBlockWithCid(bdata, c)
 	}
 
@@ -874,7 +872,9 @@ func getBlockCdn(ctx context.Context, c cid.Cid) (blocks.Block, error) {
 		if err != nil {
 			logger.Debugf("GetHashFromCidString Error %v", err)
 		}
-		addBandwidthUsage(f.Size, hash)
+		if isDedicatedGateway {
+			addBandwidthUsage(f.Size, hash)
+		}
 
 		bdata, err := ioutil.ReadAll(resp.Body)
 		if err == nil {
@@ -885,21 +885,22 @@ func getBlockCdn(ctx context.Context, c cid.Cid) (blocks.Block, error) {
 }
 func addBandwidthUsage(fileSize uint64, hash string) error {
 	apiUrl := fmt.Sprintf("%s/api/hourlyUsage/bandwidth/", pinningService)
-    reqBody, _ := json.Marshal(map[string]interface{}{
-        "amount": fileSize,
-        "cid":    hash,
-    })
-    client := &http.Client{}
-    req, _ := http.NewRequest("POST", apiUrl, bytes.NewBuffer(reqBody))
-    req.Header.Set("blockservice-API-Key", apiKey)
-    req.Header.Set("Content-Type", "application/json")
-    _, err := client.Do(req)
-    if err != nil {
-        logger.Debugf("Failed to send Bandwidth Usage Error %v", err)
-        return err
-    }
-    return nil
+	reqBody, _ := json.Marshal(map[string]interface{}{
+		"amount": fileSize,
+		"cid":    hash,
+	})
+	client := &http.Client{}
+	req, _ := http.NewRequest("POST", apiUrl, bytes.NewBuffer(reqBody))
+	req.Header.Set("blockservice-API-Key", apiKey)
+	req.Header.Set("Content-Type", "application/json")
+	_, err := client.Do(req)
+	if err != nil {
+		logger.Debugf("Failed to send Bandwidth Usage Error %v", err)
+		return err
+	}
+	return nil
 }
+
 // GetBlock gets a block in the context of a request session
 func (s *Session) GetBlock(ctx context.Context, c cid.Cid) (blocks.Block, error) {
 	ctx, span := internal.StartSpan(ctx, "Session.GetBlock", trace.WithAttributes(attribute.Stringer("CID", c)))
