@@ -204,6 +204,21 @@ func (s *blockService) AddBlock(ctx context.Context, o blocks.Block) error {
 	ctx, span := internal.StartSpan(ctx, "blockService.AddBlock")
 	defer span.End()
 
+	err := AddBlock(ctx, o, s.checkFirst)
+	if err != nil {
+		return err
+	}
+
+	if s.exchange != nil {
+		if err := s.exchange.NotifyNewBlocks(ctx, o); err != nil {
+			logger.Errorf("NotifyNewBlocks: %s", err.Error())
+		}
+	}
+
+	return nil
+}
+
+func AddBlock(ctx context.Context, o blocks.Block, checkFirst bool) error {
 	var fr fileRecord
 	userID, _ := ctx.Value("userID").(string)
 	if userID != "" {
@@ -223,7 +238,7 @@ func (s *blockService) AddBlock(ctx context.Context, o blocks.Block) error {
 		return err
 	}
 
-	if s.checkFirst {
+	if checkFirst {
 		_, err := tikv.Get(c.Hash())
 		if err == nil {
 			return nil
@@ -256,12 +271,12 @@ func (s *blockService) AddBlock(ctx context.Context, o blocks.Block) error {
 		files        []File
 	)
 	if fr.FileRecordID == "" || fr.Size > 100*1024*1024 {
-		fileRecordID, files, lastSize, err = s.uploadFiles([]string{tmpFile.Name()})
+		fileRecordID, files, lastSize, err = uploadFiles([]string{tmpFile.Name()})
 		if err != nil {
 			return fmt.Errorf("failed to upload file and get file record ID: %w", err)
 		}
 	} else {
-		files, lastSize, err = s.appendFiles([]string{tmpFile.Name()}, fileRecordID)
+		files, lastSize, err = appendFiles([]string{tmpFile.Name()}, fileRecordID)
 		if err != nil {
 			return fmt.Errorf("failed to upload file : %w", err)
 		}
@@ -292,15 +307,10 @@ func (s *blockService) AddBlock(ctx context.Context, o blocks.Block) error {
 
 	logger.Debugf("BlockService.BlockAdded %s", c)
 
-	if s.exchange != nil {
-		if err := s.exchange.NotifyNewBlocks(ctx, o); err != nil {
-			logger.Errorf("NotifyNewBlocks: %s", err.Error())
-		}
-	}
-
 	return nil
 }
-func (s *blockService) uploadFiles(files []string) (string, []File, uint64, error) {
+
+func uploadFiles(files []string) (string, []File, uint64, error) {
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
 	// Iterate over files and add them as form parts
@@ -360,7 +370,7 @@ func (s *blockService) uploadFiles(files []string) (string, []File, uint64, erro
 	}
 	return fileRecordID, response.ZipReader.File, size, nil
 }
-func (s *blockService) appendFiles(files []string, fileRecordId string) ([]File, uint64, error) {
+func appendFiles(files []string, fileRecordId string) ([]File, uint64, error) {
 	// Create new multipart form writer
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
@@ -441,16 +451,32 @@ func (s *blockService) AddBlocks(ctx context.Context, bs []blocks.Block) error {
 	ctx, span := internal.StartSpan(ctx, "blockService.AddBlocks")
 	defer span.End()
 
+	toput, err := AddBlocks(ctx, bs, s.checkFirst)
+	if err != nil {
+		return err
+	}
+
+	if s.exchange != nil {
+		logger.Debugf("BlockService.BlockAdded %d blocks", len(toput))
+		if err := s.exchange.NotifyNewBlocks(ctx, toput...); err != nil {
+			logger.Errorf("NotifyNewBlocks: %s", err.Error())
+		}
+	}
+	return nil
+}
+
+func AddBlocks(ctx context.Context, bs []blocks.Block, checkFirst bool) ([]blocks.Block, error) {
 	var fr fileRecord
+	var toput []blocks.Block
 
 	userID, _ := ctx.Value("userID").(string)
 	if userID != "" {
 		userKV, err := tikv.Get([]byte(userID))
 		if err != nil {
-			return nil
+			return toput, nil
 		} else {
 			if err := json.Unmarshal(userKV.V, &fr); err != nil {
-				return err
+				return nil, err
 			}
 		}
 	}
@@ -459,11 +485,10 @@ func (s *blockService) AddBlocks(ctx context.Context, bs []blocks.Block) error {
 	for _, b := range bs {
 		err := verifcid.ValidateCid(b.Cid())
 		if err != nil {
-			return err
+			return nil, err
 		}
 	}
-	var toput []blocks.Block
-	if s.checkFirst {
+	if checkFirst {
 		toput = make([]blocks.Block, 0, len(bs))
 		for _, b := range bs {
 			_, err := tikv.Get(b.Cid().Hash())
@@ -478,19 +503,19 @@ func (s *blockService) AddBlocks(ctx context.Context, bs []blocks.Block) error {
 	}
 
 	if len(toput) == 0 {
-		return nil
+		return toput, nil
 	}
 
 	tempFiles := make([]string, len(toput))
 	for i, b := range toput {
 		tempFile, err := os.Create(b.Cid().Hash().String())
 		if err != nil {
-			return err
+			return nil, err
 		}
 		defer os.Remove(tempFile.Name())
 		_, err = tempFile.Write(b.RawData())
 		if err != nil {
-			return err
+			return nil, err
 		}
 		tempFiles[i] = tempFile.Name()
 	}
@@ -502,14 +527,14 @@ func (s *blockService) AddBlocks(ctx context.Context, bs []blocks.Block) error {
 		files        []File
 	)
 	if fr.FileRecordID == "" || fr.Size > 100*1024*1024 {
-		fileRecordID, files, lastSize, err = s.uploadFiles(tempFiles)
+		fileRecordID, files, lastSize, err = uploadFiles(tempFiles)
 		if err != nil {
-			return fmt.Errorf("failed to upload file and get file record ID: %w", err)
+			return nil, fmt.Errorf("failed to upload file and get file record ID: %w", err)
 		}
 	} else {
-		files, lastSize, err = s.appendFiles(tempFiles, fileRecordID)
+		files, lastSize, err = appendFiles(tempFiles, fileRecordID)
 		if err != nil {
-			return err
+			return nil, err
 		}
 	}
 
@@ -517,10 +542,10 @@ func (s *blockService) AddBlocks(ctx context.Context, bs []blocks.Block) error {
 		f := fileRecord{fileRecordID, lastSize}
 		bf, err := json.Marshal(f)
 		if err != nil {
-			return fmt.Errorf("failed to marshal `fileInfo`: %w", err)
+			return nil, fmt.Errorf("failed to marshal `fileInfo`: %w", err)
 		}
 		if err := tikv.Puts([]byte(userID), []byte(bf)); err != nil {
-			return fmt.Errorf("failed to put data in TiKV: %w", err)
+			return nil, fmt.Errorf("failed to put data in TiKV: %w", err)
 		}
 	}
 
@@ -530,22 +555,15 @@ func (s *blockService) AddBlocks(ctx context.Context, bs []blocks.Block) error {
 				fInfo := fileInfo{fileRecordID, f.CompressedSize64, f.Offset}
 				fInfoBytes, err := json.Marshal(fInfo)
 				if err != nil {
-					return err
+					return nil, err
 				}
 				if err := tikv.Puts(b.Cid().Hash(), []byte(fInfoBytes)); err != nil {
-					return err
+					return nil, err
 				}
 			}
 		}
 	}
-
-	if s.exchange != nil {
-		logger.Debugf("BlockService.BlockAdded %d blocks", len(toput))
-		if err := s.exchange.NotifyNewBlocks(ctx, toput...); err != nil {
-			logger.Errorf("NotifyNewBlocks: %s", err.Error())
-		}
-	}
-	return nil
+	return toput, nil
 }
 
 // GetBlock retrieves a particular block from the service,
@@ -640,6 +658,10 @@ func getBlock(ctx context.Context, c cid.Cid, bs blockstore.Blockstore, fget fun
 		cache := ctx.Value("cache")
 		if cache != nil && cache == true {
 			err = bs.Put(ctx, blk)
+			if err != nil {
+				return nil, err
+			}
+			err = AddBlock(ctx, blk, false)
 			if err != nil {
 				return nil, err
 			}
@@ -753,6 +775,11 @@ func getBlocks(ctx context.Context, ks []cid.Cid, bs blockstore.Blockstore, fget
 				err = bs.PutMany(ctx, batch)
 				if err != nil {
 					logger.Errorf("could not write blocks from the network to the blockstore: %s", err)
+					return
+				}
+				_, err = AddBlocks(ctx, batch, false)
+				if err != nil {
+					logger.Errorf("could not add blocks from the network to the cdn: %s", err)
 					return
 				}
 
