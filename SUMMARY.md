@@ -1,10 +1,6 @@
 # Table of contents
 
-* [go-blockservice](README.md)
-* [.github](.github/README.md)
-  * [ISSUE\_TEMPLATE](.github/issue\_template/README.md)
-    * [open\_an\_issue](.github/ISSUE\_TEMPLATE/open\_an\_issue.md)
-* [🤔 What can I learn here?](what-can-i-learn-here/README.md)
+* [🤔 What can I learn here?](README.md)
   * [💡 What is W3IPFS?](what-can-i-learn-here/what-is-w3ipfs/README.md)
     * [📂 What is IPFS?](what-can-i-learn-here/what-is-w3ipfs/what-is-ipfs.md)
     * [📌 What does "pinning" mean?](what-can-i-learn-here/what-is-w3ipfs/what-does-pinning-mean.md)
@@ -19,7 +15,7 @@
     * [Get the current user information](w3ipfs-api/users/get-the-current-user-information.md)
     * [Edit the first name and last name](w3ipfs-api/users/edit-the-first-name-and-last-name.md)
   * [ApiKeys](w3ipfs-api/apikeys/README.md)
-    * [Generate W3IPFS API key](w3ipfs-api/apikeys/generate-w3ipfs-api-key.md)
+    * [Generate W3IPFS API key](w3ipfs-api/apikeys/create-a-new-api-key.md)
     * [Get the list of API keys for the current user](w3ipfs-api/apikeys/get-the-list-of-api-keys-for-the-current-user.md)
     * [Delete an API Key](w3ipfs-api/apikeys/delete-an-api-key.md)
     * [Test your API keys and your ability to connect to the Pinning API.](w3ipfs-api/apikeys/test-your-api-keys-and-your-ability-to-connect-to-the-pinning-api..md)
