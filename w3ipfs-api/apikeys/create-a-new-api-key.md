@@ -74,8 +74,9 @@ PINNING-SECRET-KEY
 {% endswagger-response %}
 {% endswagger %}
 
-{% code title="" %}
-```url
+{% tabs %}
+{% tab title="cURL" %}
+```
 curl --location --request POST '0.0.0.0:8000/api/apiKeys/' \
 --header 'Authorization: Bearer JWT' \
 --header 'Content-Type: application/json' \
@@ -99,9 +100,9 @@ curl --location --request POST '0.0.0.0:8000/api/apiKeys/' \
     }
 }'
 ```
-{% endcode %}
+{% endtab %}
 
-{% code title="Node.js" overflow="wrap" lineNumbers="true" fullWidth="false" %}
+{% tab title="Node.js" %}
 ```javascript
 var axios = require('axios');
 var data = JSON.stringify({
@@ -126,7 +127,7 @@ var data = JSON.stringify({
 
 var config = {
   method: 'post',
-  url: '0.0.0.0:8000/api/apiKeys/',
+  url: 'https://api-ipfs.attoaioz.cyou/apiKeys/',
   headers: { 
     'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODYwNDI0ODcsImlhdCI6MTY4NjAzNTI4NywibmJmIjoxNjg2MDM1Mjg3LCJzdWIiOiIwNzE0ZjM1Yi0wOGFhLTRjMmItOWRmNC1kZGFhMjc2ZDRlZDAifQ.dEZm_JcmojJQynZ-5Vc9ryifbpSNTrOn2PyRWw-aN_cudKFfreVUhIY17EewoKHzy88eSuNGs5oRdYkqoHaBzQ3jV6x8rytnxJKGr5QzKri7yALPRQu4tSHJtuxTwa_Ypi_ISS1S2CEfw43c5-luzpT2Cn0i45C6UjbZdPGd0Mw', 
     'Content-Type': 'application/json'
@@ -142,14 +143,108 @@ axios(config)
   console.log(error);
 });
 ```
-{% endcode %}
+{% endtab %}
 
+{% tab title="Python" %}
+```python
+import requests
+import json
+
+url = "https://api-ipfs.attoaioz.cyou/api/apiKeys/"
+
+payload = json.dumps({
+  "name": "test-api-key",
+  "scopes": {
+    "admin": True,
+    "data": {
+      "pin_list": True,
+      "nft_list": True
+    },
+    "pinning": {
+      "unpin": True,
+      "pin_by_hash": True,
+      "pin_file_to_ipfs": True
+    },
+    "pin_nft": {
+      "unpin_nft": True,
+      "pin_nft_to_ipfs": True
+    }
+  }
+})
+headers = {
+  'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODYwNDI0ODcsImlhdCI6MTY4NjAzNTI4NywibmJmIjoxNjg2MDM1Mjg3LCJzdWIiOiIwNzE0ZjM1Yi0wOGFhLTRjMmItOWRmNC1kZGFhMjc2ZDRlZDAifQ.dEZm_JcmojJQynZ-5Vc9ryifbpSNTrOn2PyRWw-aN_cudKFfreVUhIY17EewoKHzy88eSuNGs5oRdYkqoHaBzQ3jV6x8rytnxJKGr5QzKri7yALPRQu4tSHJtuxTwa_Ypi_ISS1S2CEfw43c5-luzpT2Cn0i45C6UjbZdPGd0Mw',
+  'Content-Type': 'application/json'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
+print(response.text)
 ```
-// Some code
+{% endtab %}
+
+{% tab title="Go" %}
+```go
+package main
+
+import (
+  "fmt"
+  "strings"
+  "net/http"
+  "io/ioutil"
+)
+
+func main() {
+
+  url := "https://api-ipfs.attoaioz.cyou/api/apiKeys/"
+  method := "POST"
+
+  payload := strings.NewReader(`{
+    "name": "test-api-key",
+    "scopes": {
+        "admin": true,
+        "data": {
+            "pin_list": true,
+            "nft_list":true
+        },
+        "pinning": {
+            "unpin": true,
+            "pin_by_hash": true,
+            "pin_file_to_ipfs": true
+        },
+        "pin_nft":{
+            "unpin_nft": true,
+            "pin_nft_to_ipfs": true
+        }
+    }
+}`)
+
+  client := &http.Client {
+  }
+  req, err := http.NewRequest(method, url, payload)
+
+  if err != nil {
+    fmt.Println(err)
+    return
+  }
+  req.Header.Add("Authorization", "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODYwNDI0ODcsImlhdCI6MTY4NjAzNTI4NywibmJmIjoxNjg2MDM1Mjg3LCJzdWIiOiIwNzE0ZjM1Yi0wOGFhLTRjMmItOWRmNC1kZGFhMjc2ZDRlZDAifQ.dEZm_JcmojJQynZ-5Vc9ryifbpSNTrOn2PyRWw-aN_cudKFfreVUhIY17EewoKHzy88eSuNGs5oRdYkqoHaBzQ3jV6x8rytnxJKGr5QzKri7yALPRQu4tSHJtuxTwa_Ypi_ISS1S2CEfw43c5-luzpT2Cn0i45C6UjbZdPGd0Mw")
+  req.Header.Add("Content-Type", "application/json")
+
+  res, err := client.Do(req)
+  if err != nil {
+    fmt.Println(err)
+    return
+  }
+  defer res.Body.Close()
+
+  body, err := ioutil.ReadAll(res.Body)
+  if err != nil {
+    fmt.Println(err)
+    return
+  }
+  fmt.Println(string(body))
+}
 ```
+{% endtab %}
+{% endtabs %}
 
-<img alt="" class="gitbook-drawing">
-
-<table data-view="cards"><thead><tr><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table>
-
-1.
+*
