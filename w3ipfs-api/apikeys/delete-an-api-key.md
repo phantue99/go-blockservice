@@ -13,6 +13,10 @@ description: /api/apiKeys/:ID
 JWT
 {% endswagger-parameter %}
 
+{% swagger-parameter in="path" required="true" %}
+API key ID
+{% endswagger-parameter %}
+
 {% swagger-response status="200: OK" description="" %}
 ```json
 {
