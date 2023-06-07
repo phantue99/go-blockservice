@@ -77,7 +77,7 @@ PINNING-SECRET-KEY
 {% tabs %}
 {% tab title="cURL" %}
 ```
-curl --location --request POST '0.0.0.0:8000/api/apiKeys/' \
+curl --location --request POST 'https://api-ipfs.attoaioz.cyou/api/apiKeys/' \
 --header 'Authorization: Bearer JWT' \
 --header 'Content-Type: application/json' \
 --data-raw '{
