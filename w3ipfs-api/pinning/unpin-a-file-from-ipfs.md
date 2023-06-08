@@ -10,11 +10,11 @@ description: /api/pinning/unpin/:pinId
 {% endswagger-description %}
 
 {% swagger-parameter in="header" name="pinning_api_key" %}
-
+PINNING-API-KEY
 {% endswagger-parameter %}
 
 {% swagger-parameter in="header" name="pinning_secret_key" %}
-
+PINNING-SECRET-KEY
 {% endswagger-parameter %}
 
 {% swagger-parameter in="path" required="true" %}
@@ -22,24 +22,24 @@ pinId
 {% endswagger-parameter %}
 
 {% swagger-response status="200: OK" description="" %}
-```
+```json
 {
     "data": {
-        "id": "e5c4456d-5e5c-465d-a02a-3a536fc6e718",
-        "file_record_id": "19164af7-8088-407d-8b4f-5bb3bae3541a",
-        "root_hash": "1220cafafc20fc9de1c913769d254ded6be39a12c21bb0028654cd838775aed6325c",
-        "cid": "Qmc1135ziMvmFG534i75E8HpJoLqzLzgKBxfjBV9cBsMAs",
-        "size": 2885325,
-        "user_id": "c2452942-5dc5-4a0d-9c38-77a66edcf43a",
-        "date_pinned": "2023-06-07T04:16:39.641031Z",
-        "date_unpinned": "0001-01-01T00:00:00Z",
+        "id": "string",
+        "file_record_id": "string",
+        "root_hash": "string",
+        "cid": "string",
+        "size": number,
+        "user_id": "string",
+        "date_pinned": "2023-01-01T11:11:11.111111Z",
+        "date_unpinned": "2023-11-11T11:11:11.111111Z",
         "pinned": true,
         "is_pin_by_hash": true,
         "is_dir": false,
         "metadata": {
-            "name": "name-ipfs-hash"
+            "name": "string"
         },
-        "status": "DONE"
+        "status": "string"
     },
     "status": "success"
 }

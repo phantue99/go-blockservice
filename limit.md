@@ -22,3 +22,7 @@ The W3IPFS public IPFS gateway is meant for testing purposes or very low volume 
 
 * Each CID has a global rate limit of 15 requests per minute (this is across all IP addresses)
 * Each IP address has a rate limit of 200 requests per minute
+
+### Dedicated Gateway Rate Limits
+
+At this time there are currently no rate limits for users retrieving content from a dedicated gateway.&#x20;

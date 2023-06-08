@@ -18,12 +18,12 @@ JWT
 {
     "data": {
         "user": {
-            "id": "c2452942-5dc5-4a0d-9c38-77a66edcf43a",
-            "first_name": "First",
-            "last_name": "Name",
-            "email": "email@gmail.com",
-            "wallet_address": "0xDacfB4c5E33a333d8882270A7333C57bE01E1a00",
-            "role": "user",
+            "id": "string",
+            "first_name": "string",
+            "last_name": "string",
+            "email": "string",
+            "wallet_address": "string",
+            "role": "string",
             "created_at": "2023-05-11T11:11:11.111111Z",
             "updated_at": "2023-06-11T11:11:11.111111Z"
         }

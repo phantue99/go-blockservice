@@ -1,12 +1,12 @@
 ---
-description: /api/nft/nfts
+description: /api/billing/historyUsage/
 ---
 
-# Retrieve nfts associated with a user ID
+# Retrieves historical usage data
 
-{% swagger method="get" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/nft/nfts/" summary="" %}
+{% swagger method="get" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/billing/historyUsage" summary="" %}
 {% swagger-description %}
-
+Retrieves historical usage data for a user based on their API key
 {% endswagger-description %}
 
 {% swagger-parameter in="header" name="pinning_api_key" required="true" %}
@@ -14,51 +14,28 @@ PINNING-API-KEY
 {% endswagger-parameter %}
 
 {% swagger-parameter in="query" name="offset" %}
-
+(default: 0)
 {% endswagger-parameter %}
 
-{% swagger-parameter in="query" name="limit" %}
-
-{% endswagger-parameter %}
-
-{% swagger-parameter in="header" name="pinning_secret_key" required="true" %}
+{% swagger-parameter in="header" required="true" name="pinning_secret_key" %}
 PINNING-SECRET-KEY
 {% endswagger-parameter %}
 
-{% swagger-parameter in="query" name="pinned" %}
-
-{% endswagger-parameter %}
-
-{% swagger-parameter in="query" name="sortBy" %}
-
-{% endswagger-parameter %}
-
-{% swagger-parameter in="query" name="sortOrder" %}
-
+{% swagger-parameter in="query" name="limit" %}
+(default: 10)
 {% endswagger-parameter %}
 
 {% swagger-response status="200: OK" description="" %}
 ```json
 {
     "data": {
-        "totals": {
-            "files": number,
-            "size": number
-        },
-        "nfts": [
+        "total_days": number,
+        "history_usages": [
             {
-                "id": "string",
-                "asset_cid": "string",
-                "metadata_cid": "string",
-                "asset_pin_id": "string",
-                "metadata_pin_id": "string",
-                "size": number,
-                "user_id": "string",
-                "created_at": "2023-01-01T11:11:11.111111Z",
-                "updated_at": "2023-11-11T11:11:11.111111Z",
-                "pinned": true,
-                "metadata_asset": {},
-                "status": "string"
+                "date": "2023-01-01T11:11:11.111111Z",
+                "total_storage": number,
+                "total_bandwidth": number,
+                "total_amount": "string"
             }
         ]
     },
@@ -71,23 +48,26 @@ PINNING-SECRET-KEY
 {% tabs %}
 {% tab title="cURL" %}
 ```
-curl --location --request GET 'https://api-ipfs.attoaioz.cyou/api/nft/nfts/?offset=0&limit=10&pinned=true&sortBy=name&sortOrder=ASC' \
+curl --location --request GET 'https://api-ipfs.attoaioz.cyou/api/billing/historyUsage?offset=0&limit=10' \
 --header 'pinning_api_key: OOC4HF2dGRlgAVzg6vbypg==' \
---header 'pinning_secret_key: 0NFNueE1IKn0bbIMB8cRzG2/JeuIwc0BX/2exij8wco='
+--header 'pinning_secret_key: 0NFNueE1IKn0bbIMB8cRzG2/JeuIwc0BX/2exij8wco=' \
+--data-raw ''
 ```
 {% endtab %}
 
 {% tab title="Node.js" %}
 ```javascript
 var axios = require('axios');
+var data = '';
 
 var config = {
   method: 'get',
-  url: 'https://api-ipfs.attoaioz.cyou/api/nft/nfts/?offset=0&limit=10&pinned=true&sortBy=name&sortOrder=ASC',
+  url: 'https://api-ipfs.attoaioz.cyou/api/billing/historyUsage?offset=0&limit=10',
   headers: { 
     'pinning_api_key': 'OOC4HF2dGRlgAVzg6vbypg==', 
     'pinning_secret_key': '0NFNueE1IKn0bbIMB8cRzG2/JeuIwc0BX/2exij8wco='
-  }
+  },
+  data : data
 };
 
 axios(config)
@@ -104,9 +84,9 @@ axios(config)
 ```python
 import requests
 
-url = "https://api-ipfs.attoaioz.cyou/api/nft/nfts/?offset=0&limit=10&pinned=true&sortBy=name&sortOrder=ASC"
+url = "https://api-ipfs.attoaioz.cyou/api/billing/historyUsage?offset=0&limit=10"
 
-payload={}
+payload = ""
 headers = {
   'pinning_api_key': 'OOC4HF2dGRlgAVzg6vbypg==',
   'pinning_secret_key': '0NFNueE1IKn0bbIMB8cRzG2/JeuIwc0BX/2exij8wco='
@@ -124,18 +104,21 @@ package main
 
 import (
   "fmt"
+  "strings"
   "net/http"
   "io/ioutil"
 )
 
 func main() {
 
-  url := "https://api-ipfs.attoaioz.cyou/api/nft/nfts/?offset=0&limit=10&pinned=true&sortBy=name&sortOrder=ASC"
+  url := "https://api-ipfs.attoaioz.cyou/api/billing/historyUsage?offset=0&limit=10"
   method := "GET"
+
+  payload := strings.NewReader(``)
 
   client := &http.Client {
   }
-  req, err := http.NewRequest(method, url, nil)
+  req, err := http.NewRequest(method, url, payload)
 
   if err != nil {
     fmt.Println(err)

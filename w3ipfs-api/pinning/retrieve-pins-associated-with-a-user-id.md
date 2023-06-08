@@ -10,11 +10,11 @@ description: /api/pinning/pins
 {% endswagger-description %}
 
 {% swagger-parameter in="header" name="pinning_api_key" required="true" %}
-
+PINNING-API-KEY
 {% endswagger-parameter %}
 
 {% swagger-parameter in="header" name="pinning_secret_key" required="true" %}
-
+PINNING-SECRET-KEY
 {% endswagger-parameter %}
 
 {% swagger-parameter in="query" name="offset" %}
@@ -38,31 +38,31 @@ Sort direction (options: ASC, DESC). Defaults to DESC.
 {% endswagger-parameter %}
 
 {% swagger-response status="200: OK" description="" %}
-```
+```json
 {
     "data": {
         "totals": {
-            "files": 100,
-            "size": 100000000000
+            "files": number,
+            "size": number
         },
         "pins": [
             {
-                "id": "2cfc0003-70d8-4475-a994-3e141e5590ce",
-                "file_record_id": "19164af7-8088-407d-8b4f-5bb3bae3541a",
-                "root_hash": "1220f7ee5e4ae2c76c8c2ef468034248f3fdb7ee0a8926e9838d987d57c43c9c030c",
-                "cid": "bafybeifjcleklgkflfbwgvc2ltveyk3o65kbb3ezkskjl7okfhxmzu5sya",
-                "size": 14150060,
-                "user_id": "c2452942-5dc5-4a0d-9c38-77a66edcf43a",
-                "date_pinned": "2023-05-23T08:29:43.264508Z",
-                "date_unpinned": "0001-01-01T00:00:00Z",
+                "id": "string",
+                "file_record_id": "string",
+                "root_hash": "string",
+                "cid": "string",
+                "size": number,
+                "user_id": "string",
+                "date_pinned": "2023-01-01T11:11:11.111111Z",
+                "date_unpinned": "2023-11-11T11:11:11.111111Z",
                 "pinned": true,
-                "is_pin_by_hash": false,
-                "sub_hash_status": "DONE",
+                "is_pin_by_hash": true,
+                "sub_hash_status": "string",
                 "is_dir": false,
                 "metadata": {
-                    "name": "test"
+                    "name": "string"
                 },
-                "status": "DONE"
+                "status": "string"
             }
         ]
     },

@@ -13,7 +13,7 @@ description: /api/apiKeys/:ID
 JWT
 {% endswagger-parameter %}
 
-{% swagger-parameter in="path" required="true" %}
+{% swagger-parameter in="path" required="true" name="id" %}
 API key ID
 {% endswagger-parameter %}
 

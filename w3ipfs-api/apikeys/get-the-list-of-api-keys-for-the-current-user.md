@@ -20,10 +20,10 @@ JWT
         "total": 1,
         "api_keys": [
             {
-                "id": "71773d36-2d06-483b-8cdc-8202b5d89746",
-                "name": "Default",
-                "api_key": "a9hXr7Hr36NGtrSqyrrI2Q==",
-                "secret_key": "4t40...CXQ=",
+                "id": "string",
+                "name": "string",
+                "api_key": "string",
+                "secret_key": "string",
                 "scopes": {
                     "admin": true
                 },

@@ -24,7 +24,7 @@ Last name
 {% endswagger-parameter %}
 
 {% swagger-response status="200: OK" description="" %}
-```
+```json
 {
     "message": "Profile updated successfully",
     "status": "success"

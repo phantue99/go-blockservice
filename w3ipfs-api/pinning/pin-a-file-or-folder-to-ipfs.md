@@ -22,25 +22,25 @@ Read stream representing the file
 {% endswagger-parameter %}
 
 {% swagger-response status="201: Created" description="" %}
-```
+```json
 {
     "data": {
-        "id": "3c3fec2a-ca65-4b8e-bcf3-c8e2ceaa23d2",
-        "file_record_id": "00000000-0000-0000-0000-000000000000",
-        "root_hash": "1220ce95a46e2063878d025d68ce543a205eee90e5b31a659cb8c7c108fb3b133414",
-        "cid": "bafkreigoswsg4iddq6gqexlizzkduic652iolmy2mwolrr6bbd5twezucq",
-        "user_id": "c2452942-5dc5-4a0d-9c38-77a66edcf43a",
-        "date_pinned": "2023-06-07T03:52:37.064050801Z",
-        "date_unpinned": "0001-01-01T00:00:00Z",
+        "id": "string",
+        "file_record_id": "string",
+        "root_hash": "string",
+        "cid": "string",
+        "user_id": "string",
+        "date_pinned": "2023-01-01T11:11:11.111111Z",
+        "date_unpinned": "2023-11-11T11:11:11.111111Z",
         "pinned": false,
         "is_pin_by_hash": false,
-        "sub_hash_status": "DONE",
+        "sub_hash_status": "string",
         "is_dir": false,
         "metadata": {
-            "name": "Screenshot from 2023-05-31 15-18-44.png",
-            "type": "image/png"
+            "name": "string",
+            "type": "string"
         },
-        "status": "PENDING"
+        "status": "string"
     },
     "status": "success"
 }

@@ -10,11 +10,11 @@ description: /api/nft/
 {% endswagger-description %}
 
 {% swagger-parameter in="header" name="pinning_api_key" required="true" %}
-
+PINNING-API-KEY
 {% endswagger-parameter %}
 
 {% swagger-parameter in="header" name="pinning_secret_key" required="true" %}
-
+PINNING-SECRET-KEY
 {% endswagger-parameter %}
 
 {% swagger-parameter in="body" required="true" name="file" type="File" %}
@@ -30,24 +30,24 @@ asset cid
 {% endswagger-parameter %}
 
 {% swagger-response status="201: Created" description="" %}
-```
+```json
 {
     "data": {
-        "id": "f0cda369-2846-414d-8e8d-8c0394113bef",
-        "asset_cid": "bafkreiaopgqg3im4zzm2rq7mudz2qr3m62qrziatq3x73nlnidcmh3twjy",
-        "metadata_cid": "bafkreigjjz4vizrrbvz6lu6fow3bkgnuuucrex46yuew74wq4s2r7mjaay",
-        "asset_pin_id": "35e614f2-3161-4a4a-bb67-dbd68e2cc5ba",
-        "metadata_pin_id": "71107573-58bc-427e-b536-05465e830dff",
-        "size": 13557,
-        "user_id": "c2452942-5dc5-4a0d-9c38-77a66edcf43a",
-        "created_at": "2023-06-07T04:36:10.723127485Z",
-        "updated_at": "2023-06-07T04:36:10.723127485Z",
+        "id": "string",
+        "asset_cid": "string",
+        "metadata_cid": "string",
+        "asset_pin_id": "string",
+        "metadata_pin_id": "string",
+        "size": number,
+        "user_id": "string",
+        "created_at": "2023-01-01T11:11:11.111111Z",
+        "updated_at": "2023-11-11T11:11:11.111111Z",
         "pinned": true,
         "metadata_asset": {
-            "name": "test.png",
-            "type": "image/png"
+            "name": "string",
+            "type": "string"
         },
-        "status": "DONE"
+        "status": "string"
     },
     "status": "success"
 }

@@ -1,16 +1,24 @@
 ---
-description: /api/pinning/pinByHash/
+description: /api/billing/topUp/
 ---
 
-# Pin a file to IPFS by its CID
+# Retrieves top up data
 
-{% swagger method="post" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/pinning/pinByHash" summary="" %}
+{% swagger method="get" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/billing/topUp" summary="" %}
 {% swagger-description %}
-
+Retrieves top up data for a user based on their API key
 {% endswagger-description %}
 
 {% swagger-parameter in="header" name="pinning_api_key" required="true" %}
 PINNING-API-KEY
+{% endswagger-parameter %}
+
+{% swagger-parameter in="query" name="offset" %}
+(default: 0)
+{% endswagger-parameter %}
+
+{% swagger-parameter in="query" name="limit" %}
+(default: 10)
 {% endswagger-parameter %}
 
 {% swagger-parameter in="header" name="pinning_secret_key" required="true" %}
@@ -21,20 +29,26 @@ PINNING-SECRET-KEY
 ```json
 {
     "data": {
-        "id": "string",
-        "file_record_id": "string",
-        "root_hash": "string",
-        "cid": "string",
-        "user_id": "string",
-        "date_pinned": "2023-01-01T11:11:11.111111Z",
-        "date_unpinned": "2023-11-11T11:11:11.111111Z",
-        "pinned": false,
-        "is_pin_by_hash": true,
-        "is_dir": false,
-        "metadata": {
-            "name": "string"
-        },
-        "status": "string"
+        "totals": number,
+        "top_up_usages": [
+            {
+                "cosmos_tx_hash": "string",
+                "event_index": number,
+                "evm_tx_hash": "string",
+                "id": "string",
+                "sender": "string",
+                "recipient": "string",
+                "block_number": number,
+                "status": true,
+                "amount": {
+                    "denom": "string",
+                    "amount": "string"
+                },
+                "total_amount": "string",
+                "created_at": "2023-01-01T11:11:11.111111Z"",
+                "updated_at": "2023-01-01T11:11:11.111111Z"
+            }
+        ]
     },
     "status": "success"
 }
@@ -45,14 +59,19 @@ PINNING-SECRET-KEY
 {% tabs %}
 {% tab title="cURL" %}
 ```
-curl --location --request POST 'https://api-ipfs.attoaioz.cyou/api/pinning/pinByHash' \
+curl --location --request GET 'https://api-ipfs.attoaioz.cyou/api/billing/topUp?offset=0&limit=10' \
 --header 'pinning_api_key: OOC4HF2dGRlgAVzg6vbypg==' \
 --header 'pinning_secret_key: 0NFNueE1IKn0bbIMB8cRzG2/JeuIwc0BX/2exij8wco=' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "hash_to_pin": "Qmc1135ziMvmFG534i75E8HpJoLqzLzgKBxfjBV9cBsMAs",
-    "metadata": {
-        "name": "name-ipfs-hash"
+    "name": "test-api-key3",
+    "scopes": {
+        "data": {
+            "pinList": true
+        },
+        "pinning": {
+            "unpin": true
+        }
     }
 }'
 ```
@@ -62,15 +81,20 @@ curl --location --request POST 'https://api-ipfs.attoaioz.cyou/api/pinning/pinBy
 ```javascript
 var axios = require('axios');
 var data = JSON.stringify({
-  "hash_to_pin": "Qmc1135ziMvmFG534i75E8HpJoLqzLzgKBxfjBV9cBsMAs",
-  "metadata": {
-    "name": "name-ipfs-hash"
+  "name": "test-api-key3",
+  "scopes": {
+    "data": {
+      "pinList": true
+    },
+    "pinning": {
+      "unpin": true
+    }
   }
 });
 
 var config = {
-  method: 'post',
-  url: 'https://api-ipfs.attoaioz.cyou/api/pinning/pinByHash',
+  method: 'get',
+  url: 'https://api-ipfs.attoaioz.cyou/api/billing/topUp?offset=0&limit=10',
   headers: { 
     'pinning_api_key': 'OOC4HF2dGRlgAVzg6vbypg==', 
     'pinning_secret_key': '0NFNueE1IKn0bbIMB8cRzG2/JeuIwc0BX/2exij8wco=', 
@@ -86,7 +110,6 @@ axios(config)
 .catch(function (error) {
   console.log(error);
 });
-
 ```
 {% endtab %}
 
@@ -95,12 +118,17 @@ axios(config)
 import requests
 import json
 
-url = "https://api-ipfs.attoaioz.cyou/api/pinning/pinByHash"
+url = "https://api-ipfs.attoaioz.cyou/api/billing/topUp?offset=0&limit=10"
 
 payload = json.dumps({
-  "hash_to_pin": "Qmc1135ziMvmFG534i75E8HpJoLqzLzgKBxfjBV9cBsMAs",
-  "metadata": {
-    "name": "name-ipfs-hash"
+  "name": "test-api-key3",
+  "scopes": {
+    "data": {
+      "pinList": True
+    },
+    "pinning": {
+      "unpin": True
+    }
   }
 })
 headers = {
@@ -109,10 +137,9 @@ headers = {
   'Content-Type': 'application/json'
 }
 
-response = requests.request("POST", url, headers=headers, data=payload)
+response = requests.request("GET", url, headers=headers, data=payload)
 
 print(response.text)
-
 ```
 {% endtab %}
 
@@ -129,13 +156,18 @@ import (
 
 func main() {
 
-  url := "https://api-ipfs.attoaioz.cyou/api/pinning/pinByHash"
-  method := "POST"
+  url := "https://api-ipfs.attoaioz.cyou/api/billing/topUp?offset=0&limit=10"
+  method := "GET"
 
   payload := strings.NewReader(`{
-    "hash_to_pin": "Qmc1135ziMvmFG534i75E8HpJoLqzLzgKBxfjBV9cBsMAs",
-    "metadata": {
-        "name": "name-ipfs-hash"
+    "name": "test-api-key3",
+    "scopes": {
+        "data": {
+            "pinList": true
+        },
+        "pinning": {
+            "unpin": true
+        }
     }
 }`)
 

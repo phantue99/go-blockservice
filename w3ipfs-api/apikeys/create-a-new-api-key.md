@@ -61,7 +61,7 @@ PINNING-SECRET-KEY
 {% endswagger-parameter %}
 
 {% swagger-response status="200: OK" description="" %}
-```
+```json
 {
     "data": {
         "name": "API KEY",
