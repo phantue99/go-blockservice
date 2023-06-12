@@ -4,6 +4,8 @@ description: /api/pinning/
 
 # Pin a file or folder to IPFS
 
+This API allows you to pin a file to IPFS using the provided pinning API key and secret key.
+
 {% swagger method="post" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/pinning" summary="" %}
 {% swagger-description %}
 
@@ -52,8 +54,8 @@ Read stream representing the file
 {% tab title="cURL" %}
 ```
 curl --location --request POST 'https://api-ipfs.attoaioz.cyou/api/pinning/' \
---header 'pinning_api_key: OOC4HF2dGRlgAVzg6vbypg==' \
---header 'pinning_secret_key: 0NFNueE1IKn0bbIMB8cRzG2/JeuIwc0BX/2exij8wco=' \
+--header 'pinning_api_key: KEY' \
+--header 'pinning_secret_key: SECRET' \
 --form 'file=@"/test.png"'
 ```
 {% endtab %}
@@ -70,8 +72,8 @@ var config = {
   method: 'post',
   url: 'https://api-ipfs.attoaioz.cyou/api/pinning/',
   headers: { 
-    'pinning_api_key': 'OOC4HF2dGRlgAVzg6vbypg==', 
-    'pinning_secret_key': '0NFNueE1IKn0bbIMB8cRzG2/JeuIwc0BX/2exij8wco=', 
+    'pinning_api_key': 'API',
+    'pinning_secret_key': 'SECRET', 
     ...data.getHeaders()
   },
   data : data
@@ -99,8 +101,8 @@ files=[
   ('file',('test.png',open('/test.png','rb'),'image/png'))
 ]
 headers = {
-  'pinning_api_key': 'OOC4HF2dGRlgAVzg6vbypg==',
-  'pinning_secret_key': '0NFNueE1IKn0bbIMB8cRzG2/JeuIwc0BX/2exij8wco='
+  'pinning_api_key': 'API',
+  'pinning_secret_key': 'SECRET'
 }
 
 response = requests.request("POST", url, headers=headers, data=payload, files=files)
@@ -156,8 +158,8 @@ func main() {
     fmt.Println(err)
     return
   }
-  req.Header.Add("pinning_api_key", "OOC4HF2dGRlgAVzg6vbypg==")
-  req.Header.Add("pinning_secret_key", "0NFNueE1IKn0bbIMB8cRzG2/JeuIwc0BX/2exij8wco=")
+  req.Header.Add("pinning_api_key", "API")
+  req.Header.Add("pinning_secret_key", "SECRET")
 
   req.Header.Set("Content-Type", writer.FormDataContentType())
   res, err := client.Do(req)

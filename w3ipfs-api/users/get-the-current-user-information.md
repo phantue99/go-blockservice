@@ -4,6 +4,8 @@ description: /api/users/me
 
 # Get the current user information
 
+This API allows you to retrieve the details of the currently authenticated user.
+
 {% swagger method="get" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/users/me" summary="" %}
 {% swagger-description %}
 
@@ -13,7 +15,7 @@ description: /api/users/me
 JWT
 {% endswagger-parameter %}
 
-{% swagger-response status="200: OK" description="" %}
+{% swagger-response status="200: OK" description="The API will respond with a JSON object containing the user details." %}
 ```json
 {
     "data": {

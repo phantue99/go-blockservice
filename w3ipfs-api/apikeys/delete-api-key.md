@@ -2,11 +2,15 @@
 description: /api/apiKeys/:ID
 ---
 
-# Delete an API Key
+# Delete API Key
+
+This API allows you to delete an API key associated with the authenticated user.
 
 {% swagger method="delete" path=":ID" baseUrl="https://api-ipfs.attoaioz.cyou/api/apiKeys/" summary="" %}
 {% swagger-description %}
+`{ID}`
 
+: The unique identifier of the API key to be deleted.
 {% endswagger-description %}
 
 {% swagger-parameter in="header" name="Authorization" required="true" %}
@@ -33,6 +37,8 @@ API key ID
 curl --location --request DELETE 'https://api-ipfs.attoaioz.cyou/api/apiKeys/{ID}
 --header 'Authorization: Bearer JWT'
 ```
+
+
 {% endtab %}
 
 {% tab title="Node.js" %}

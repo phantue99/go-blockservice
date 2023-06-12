@@ -2,7 +2,9 @@
 description: /api/apiKeys/list
 ---
 
-# Get the list of API keys for the current user
+# List API Keys
+
+This API allows you to retrieve a list of API keys associated with the authenticated user.
 
 {% swagger method="get" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/apiKeys/list" summary="" %}
 {% swagger-description %}
@@ -42,7 +44,6 @@ JWT
 ```
 curl --location --request GET 'https://api-ipfs.attoaioz.cyou/api/apiKeys/list' \
 --header 'Authorization: Bearer JWT' \
---data-raw ''
 ```
 {% endtab %}
 

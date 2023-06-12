@@ -2,7 +2,9 @@
 description: /api/apiKeys/testAuthentication
 ---
 
-# Test your API keys and your ability to connect to the Pinning API.
+# Test Authentication
+
+This API allows you to test the authentication and communication with the Web3 IPFS API using the provided pinning API key and secret key.
 
 
 
@@ -32,8 +34,8 @@ PINNING-SECRET-KEY
 {% tab title="cURL" %}
 ```
 curl --location --request GET 'https://api-ipfs.attoaioz.cyou/api/apiKeys/testAuthentication' \
---header 'pinning_API_key: fVzXpSAqYDAwyFaw1VJB2A==' \
---header 'pinning_SECRET_key: xmOAFSu/gf8B2vvzji3PC5wSlLhfHDMerNSj4gLxFwA='
+--header 'pinning_api_key: KEY' \
+--header 'pinning_secret_key: SECRET'
 ```
 {% endtab %}
 
@@ -121,3 +123,4 @@ func main() {
 ```
 {% endtab %}
 {% endtabs %}
+
