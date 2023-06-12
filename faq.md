@@ -1,6 +1,6 @@
 # 💪 FAQ
 
-Our goal is to make you as happy as a bunch of pinatas frolicking amongst the hills.
+
 
 ## What does it mean to pin content on IPFS?
 
