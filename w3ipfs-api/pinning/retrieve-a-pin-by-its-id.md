@@ -53,8 +53,8 @@ pinId
 {% tab title="cURL" %}
 ```
 curl --location --request GET 'https://api-ipfs.attoaioz.cyou/api/pinning/3c3fec2a-ca65-4b8e-bcf3-c8e2ceaa23d2' \
---header 'pinning_api_key: OOC4HF2dGRlgAVzg6vbypg==' \
---header 'pinning_secret_key: 0NFNueE1IKn0bbIMB8cRzG2/JeuIwc0BX/2exij8wco=' \
+--header 'pinning_api_key: KEY' \
+--header 'pinning_secret_key: SECRET' \
 --data-raw ''
 ```
 {% endtab %}
@@ -68,8 +68,8 @@ var config = {
   method: 'get',
   url: 'https://api-ipfs.attoaioz.cyou/api/pinning/3c3fec2a-ca65-4b8e-bcf3-c8e2ceaa23d2',
   headers: { 
-    'pinning_api_key': 'OOC4HF2dGRlgAVzg6vbypg==', 
-    'pinning_secret_key': '0NFNueE1IKn0bbIMB8cRzG2/JeuIwc0BX/2exij8wco='
+    'pinning_api_key': 'KEY', 
+    'pinning_secret_key': 'SECRET'
   },
   data : data
 };
@@ -93,8 +93,8 @@ url = "https://api-ipfs.attoaioz.cyou/api/pinning/3c3fec2a-ca65-4b8e-bcf3-c8e2ce
 
 payload = ""
 headers = {
-  'pinning_api_key': 'OOC4HF2dGRlgAVzg6vbypg==',
-  'pinning_secret_key': '0NFNueE1IKn0bbIMB8cRzG2/JeuIwc0BX/2exij8wco='
+  'pinning_api_key': 'KEY',
+  'pinning_secret_key': 'SECRET'
 }
 
 response = requests.request("GET", url, headers=headers, data=payload)
@@ -130,8 +130,8 @@ func main() {
     fmt.Println(err)
     return
   }
-  req.Header.Add("pinning_api_key", "OOC4HF2dGRlgAVzg6vbypg==")
-  req.Header.Add("pinning_secret_key", "0NFNueE1IKn0bbIMB8cRzG2/JeuIwc0BX/2exij8wco=")
+  req.Header.Add("pinning_api_key", "KEY")
+  req.Header.Add("pinning_secret_key", "SECRET")
 
   res, err := client.Do(req)
   if err != nil {

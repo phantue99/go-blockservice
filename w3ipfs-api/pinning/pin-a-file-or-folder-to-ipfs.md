@@ -72,7 +72,7 @@ var config = {
   method: 'post',
   url: 'https://api-ipfs.attoaioz.cyou/api/pinning/',
   headers: { 
-    'pinning_api_key': 'API',
+    'pinning_api_key': 'KEY',
     'pinning_secret_key': 'SECRET', 
     ...data.getHeaders()
   },
@@ -101,7 +101,7 @@ files=[
   ('file',('test.png',open('/test.png','rb'),'image/png'))
 ]
 headers = {
-  'pinning_api_key': 'API',
+  'pinning_api_key': 'KEY',
   'pinning_secret_key': 'SECRET'
 }
 
@@ -158,7 +158,7 @@ func main() {
     fmt.Println(err)
     return
   }
-  req.Header.Add("pinning_api_key", "API")
+  req.Header.Add("pinning_api_key", "KEY")
   req.Header.Add("pinning_secret_key", "SECRET")
 
   req.Header.Set("Content-Type", writer.FormDataContentType())

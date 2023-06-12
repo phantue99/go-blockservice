@@ -45,8 +45,8 @@ PINNING-SECRET-KEY
 {% tab title="cURL" %}
 ```
 curl --location --request GET 'https://api-ipfs.attoaioz.cyou/api/billing/thisMonthUsage?offset=0&limit=10' \
---header 'pinning_api_key: OOC4HF2dGRlgAVzg6vbypg==' \
---header 'pinning_secret_key: 0NFNueE1IKn0bbIMB8cRzG2/JeuIwc0BX/2exij8wco='
+--header 'pinning_api_key: KEY' \
+--header 'pinning_secret_key: SECRET'
 ```
 {% endtab %}
 
@@ -58,8 +58,8 @@ var config = {
   method: 'get',
   url: 'https://api-ipfs.attoaioz.cyou/api/billing/thisMonthUsage?offset=0&limit=10',
   headers: { 
-    'pinning_api_key': 'OOC4HF2dGRlgAVzg6vbypg==', 
-    'pinning_secret_key': '0NFNueE1IKn0bbIMB8cRzG2/JeuIwc0BX/2exij8wco='
+    'pinning_api_key': 'KEY', 
+    'pinning_secret_key': 'SECRET'
   }
 };
 
@@ -81,8 +81,8 @@ url = "https://api-ipfs.attoaioz.cyou/api/billing/thisMonthUsage?offset=0&limit=
 
 payload={}
 headers = {
-  'pinning_api_key': 'OOC4HF2dGRlgAVzg6vbypg==',
-  'pinning_secret_key': '0NFNueE1IKn0bbIMB8cRzG2/JeuIwc0BX/2exij8wco='
+  'pinning_api_key': 'KEY',
+  'pinning_secret_key': 'SECRET'
 }
 
 response = requests.request("GET", url, headers=headers, data=payload)
@@ -114,8 +114,8 @@ func main() {
     fmt.Println(err)
     return
   }
-  req.Header.Add("pinning_api_key", "OOC4HF2dGRlgAVzg6vbypg==")
-  req.Header.Add("pinning_secret_key", "0NFNueE1IKn0bbIMB8cRzG2/JeuIwc0BX/2exij8wco=")
+  req.Header.Add("pinning_api_key", "KEY")
+  req.Header.Add("pinning_secret_key", "SECRET")
 
   res, err := client.Do(req)
   if err != nil {

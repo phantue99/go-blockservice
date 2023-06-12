@@ -59,8 +59,8 @@ asset cid
 {% tab title="cURL" %}
 ```
 curl --location --request POST 'https://api-ipfs.attoaioz.cyou/api/nft/' \
---header 'pinning_api_key: OOC4HF2dGRlgAVzg6vbypg==' \
---header 'pinning_secret_key: 0NFNueE1IKn0bbIMB8cRzG2/JeuIwc0BX/2exij8wco=' \
+--header 'pinning_api_key: KEY' \
+--header 'pinning_secret_key: SECRET' \
 --form 'metadata=@"/sample.json"' \
 --form 'file=@"/test.png"'
 ```
@@ -79,8 +79,8 @@ var config = {
   method: 'post',
   url: 'https://api-ipfs.attoaioz.cyou/api/nft/',
   headers: { 
-    'pinning_api_key': 'OOC4HF2dGRlgAVzg6vbypg==', 
-    'pinning_secret_key': '0NFNueE1IKn0bbIMB8cRzG2/JeuIwc0BX/2exij8wco=', 
+    'pinning_api_key': 'KEY', 
+    'pinning_secret_key': 'SECRET', 
     ...data.getHeaders()
   },
   data : data
@@ -108,8 +108,8 @@ files=[
   ('file',('test.png',open('/test.png','rb'),'image/png'))
 ]
 headers = {
-  'pinning_api_key': 'OOC4HF2dGRlgAVzg6vbypg==',
-  'pinning_secret_key': '0NFNueE1IKn0bbIMB8cRzG2/JeuIwc0BX/2exij8wco='
+  'pinning_api_key': 'KEY',
+  'pinning_secret_key': 'SECRET'
 }
 
 response = requests.request("POST", url, headers=headers, data=payload, files=files)
@@ -170,8 +170,8 @@ func main() {
     fmt.Println(err)
     return
   }
-  req.Header.Add("pinning_api_key", "OOC4HF2dGRlgAVzg6vbypg==")
-  req.Header.Add("pinning_secret_key", "0NFNueE1IKn0bbIMB8cRzG2/JeuIwc0BX/2exij8wco=")
+  req.Header.Add("pinning_api_key", "KEY")
+  req.Header.Add("pinning_secret_key", "SECRET")
 
   req.Header.Set("Content-Type", writer.FormDataContentType())
   res, err := client.Do(req)

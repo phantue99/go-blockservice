@@ -60,8 +60,8 @@ PINNING-SECRET-KEY
 {% tab title="cURL" %}
 ```
 curl --location --request GET 'https://api-ipfs.attoaioz.cyou/api/billing/topUp?offset=0&limit=10' \
---header 'pinning_api_key: OOC4HF2dGRlgAVzg6vbypg==' \
---header 'pinning_secret_key: 0NFNueE1IKn0bbIMB8cRzG2/JeuIwc0BX/2exij8wco=' \
+--header 'pinning_api_key: KEY' \
+--header 'pinning_secret_key: SECRET' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "name": "test-api-key3",
@@ -96,8 +96,8 @@ var config = {
   method: 'get',
   url: 'https://api-ipfs.attoaioz.cyou/api/billing/topUp?offset=0&limit=10',
   headers: { 
-    'pinning_api_key': 'OOC4HF2dGRlgAVzg6vbypg==', 
-    'pinning_secret_key': '0NFNueE1IKn0bbIMB8cRzG2/JeuIwc0BX/2exij8wco=', 
+    'pinning_api_key': 'KEY', 
+    'pinning_secret_key': 'SECRET', 
     'Content-Type': 'application/json'
   },
   data : data
@@ -132,8 +132,8 @@ payload = json.dumps({
   }
 })
 headers = {
-  'pinning_api_key': 'OOC4HF2dGRlgAVzg6vbypg==',
-  'pinning_secret_key': '0NFNueE1IKn0bbIMB8cRzG2/JeuIwc0BX/2exij8wco=',
+  'pinning_api_key': 'KEY',
+  'pinning_secret_key': 'SECRET',
   'Content-Type': 'application/json'
 }
 
@@ -179,8 +179,8 @@ func main() {
     fmt.Println(err)
     return
   }
-  req.Header.Add("pinning_api_key", "OOC4HF2dGRlgAVzg6vbypg==")
-  req.Header.Add("pinning_secret_key", "0NFNueE1IKn0bbIMB8cRzG2/JeuIwc0BX/2exij8wco=")
+  req.Header.Add("pinning_api_key", "KEY")
+  req.Header.Add("pinning_secret_key", "SECRET")
   req.Header.Add("Content-Type", "application/json")
 
   res, err := client.Do(req)

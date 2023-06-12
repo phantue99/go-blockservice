@@ -129,7 +129,7 @@ var config = {
   method: 'post',
   url: 'https://api-ipfs.attoaioz.cyou/apiKeys/',
   headers: { 
-    'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODYwNDI0ODcsImlhdCI6MTY4NjAzNTI4NywibmJmIjoxNjg2MDM1Mjg3LCJzdWIiOiIwNzE0ZjM1Yi0wOGFhLTRjMmItOWRmNC1kZGFhMjc2ZDRlZDAifQ.dEZm_JcmojJQynZ-5Vc9ryifbpSNTrOn2PyRWw-aN_cudKFfreVUhIY17EewoKHzy88eSuNGs5oRdYkqoHaBzQ3jV6x8rytnxJKGr5QzKri7yALPRQu4tSHJtuxTwa_Ypi_ISS1S2CEfw43c5-luzpT2Cn0i45C6UjbZdPGd0Mw', 
+    'Authorization': 'Bearer JWT', 
     'Content-Type': 'application/json'
   },
   data : data
@@ -172,7 +172,7 @@ payload = json.dumps({
   }
 })
 headers = {
-  'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODYwNDI0ODcsImlhdCI6MTY4NjAzNTI4NywibmJmIjoxNjg2MDM1Mjg3LCJzdWIiOiIwNzE0ZjM1Yi0wOGFhLTRjMmItOWRmNC1kZGFhMjc2ZDRlZDAifQ.dEZm_JcmojJQynZ-5Vc9ryifbpSNTrOn2PyRWw-aN_cudKFfreVUhIY17EewoKHzy88eSuNGs5oRdYkqoHaBzQ3jV6x8rytnxJKGr5QzKri7yALPRQu4tSHJtuxTwa_Ypi_ISS1S2CEfw43c5-luzpT2Cn0i45C6UjbZdPGd0Mw',
+  'Authorization': 'Bearer JWT',
   'Content-Type': 'application/json'
 }
 
@@ -226,7 +226,7 @@ func main() {
     fmt.Println(err)
     return
   }
-  req.Header.Add("Authorization", "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODYwNDI0ODcsImlhdCI6MTY4NjAzNTI4NywibmJmIjoxNjg2MDM1Mjg3LCJzdWIiOiIwNzE0ZjM1Yi0wOGFhLTRjMmItOWRmNC1kZGFhMjc2ZDRlZDAifQ.dEZm_JcmojJQynZ-5Vc9ryifbpSNTrOn2PyRWw-aN_cudKFfreVUhIY17EewoKHzy88eSuNGs5oRdYkqoHaBzQ3jV6x8rytnxJKGr5QzKri7yALPRQu4tSHJtuxTwa_Ypi_ISS1S2CEfw43c5-luzpT2Cn0i45C6UjbZdPGd0Mw")
+  req.Header.Add("Authorization", "Bearer JWT")
   req.Header.Add("Content-Type", "application/json")
 
   res, err := client.Do(req)
