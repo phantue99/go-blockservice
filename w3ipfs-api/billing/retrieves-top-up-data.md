@@ -45,7 +45,7 @@ PINNING-SECRET-KEY
                     "amount": "string"
                 },
                 "total_amount": "string",
-                "created_at": "2023-01-01T11:11:11.111111Z"",
+                "created_at": "2023-01-01T11:11:11.111111Z",
                 "updated_at": "2023-01-01T11:11:11.111111Z"
             }
         ]
