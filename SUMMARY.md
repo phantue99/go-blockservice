@@ -35,7 +35,7 @@
     * [Retrieves top up data](w3ipfs-api/billing/retrieves-top-up-data.md)
     * [Get this month usage data for a user](w3ipfs-api/billing/get-this-month-usage-data-for-a-user.md)
 * [🚪 Gateway](page-1.md)
-  * [Why Gateways?](gateway/why-gateways.md)
+  * [Understanding Gateways and their Importance in IPFS](gateway/understanding-gateways-and-their-importance-in-ipfs.md)
   * [The W3IPFS Public Gateway](gateway/the-w3ipfs-public-gateway.md)
   * [Dedicated Gateways](gateway/dedicated-gateways.md)
 * [🥳 NFTs](nfts.md)
