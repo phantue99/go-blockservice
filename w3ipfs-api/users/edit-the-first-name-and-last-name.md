@@ -6,6 +6,15 @@ description: /api/users/editProfile
 
 Edit the first name and last name of the user's profile
 
+The request body when edit will look like this:&#x20;
+
+```
+{
+    first_name: string,
+    last_name: string
+}
+```
+
 {% swagger method="put" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/users/editProfile" summary="" %}
 {% swagger-description %}
 

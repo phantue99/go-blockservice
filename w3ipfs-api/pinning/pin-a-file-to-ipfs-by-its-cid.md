@@ -4,6 +4,21 @@ description: /api/pinning/pinByHash/
 
 # Pin a file to IPFS by its CID
 
+The request body when pin a file by CID will look like this:&#x20;
+
+```
+{
+    hash_to_pin: CID,
+    metadata: {
+        name: string,
+        keyvalues: {
+            key1: value1,
+            key2: value2
+        }
+    }
+}
+```
+
 {% swagger method="post" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/pinning/pinByHash" summary="" %}
 {% swagger-description %}
 
@@ -15,6 +30,14 @@ PINNING-API-KEY
 
 {% swagger-parameter in="header" name="pinning_secret_key" required="true" %}
 PINNING-SECRET-KEY
+{% endswagger-parameter %}
+
+{% swagger-parameter in="body" name="hash_to_pin" required="true" %}
+CID
+{% endswagger-parameter %}
+
+{% swagger-parameter in="body" name="metadata" %}
+
 {% endswagger-parameter %}
 
 {% swagger-response status="200: OK" description="" %}

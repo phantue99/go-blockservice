@@ -6,6 +6,12 @@ description: /api/pinning/
 
 This API allows you to pin a file to IPFS using the provided pinning API key and secret key.
 
+Example metadata:
+
+```
+{"name": "sample name", "keyvalues":{"key1": "value1","key2": "value2"}}
+```
+
 {% swagger method="post" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/pinning" summary="" %}
 {% swagger-description %}
 
@@ -13,6 +19,10 @@ This API allows you to pin a file to IPFS using the provided pinning API key and
 
 {% swagger-parameter in="header" name="pinning_api_key" required="true" %}
 PINNING-API-KEY
+{% endswagger-parameter %}
+
+{% swagger-parameter in="body" name="metadata" %}
+Optional stringified object
 {% endswagger-parameter %}
 
 {% swagger-parameter in="header" name="pinning_secret_key" required="true" %}
