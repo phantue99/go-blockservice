@@ -60,6 +60,14 @@ PINNING-API-KEY
 PINNING-SECRET-KEY
 {% endswagger-parameter %}
 
+{% swagger-parameter in="body" name="name" required="true" %}
+
+{% endswagger-parameter %}
+
+{% swagger-parameter in="body" name="scopes" type="" %}
+
+{% endswagger-parameter %}
+
 {% swagger-response status="200: OK" description="" %}
 ```json
 {

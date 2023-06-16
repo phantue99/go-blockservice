@@ -4,7 +4,7 @@ description: /api/pinning/unpin/:pinId
 
 # Unpin a file from IPFS
 
-{% swagger method="get" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/pinning/unpin/:pinId" summary="" %}
+{% swagger method="delete" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/pinning/unpin/:pinId" summary="" %}
 {% swagger-description %}
 
 {% endswagger-description %}
