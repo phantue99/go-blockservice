@@ -12,11 +12,12 @@ The W3IPFS API has a rate limit of 180 requests per minute.
 
 The following API calls have increased rate limits:
 
+* Endpoints under the `/users/` and `/apiKeys/` route have a rate limit of 60 requests per minute
+* The Pinning Services API endpoint for listing content has a rate limit of 60 requests per minute
+
 #### Recommendations
 
 For users with burst-heavy traffic patterns, it is advisable to implement a task scheduler or a queue-based upload approach. This approach helps ensure that the number of requests made to the API stays within the allowed limit.
-
-
 
 ### Public and Dedicated Gateway Rate Limits
 
