@@ -50,15 +50,13 @@ PINNING-SECRET-KEY
 ```
 curl --location --request GET 'https://api-ipfs.attoaioz.cyou/api/billing/historyUsage?offset=0&limit=10' \
 --header 'pinning_api_key: KEY' \
---header 'pinning_secret_key: SECRET' \
---data-raw ''
+--header 'pinning_secret_key: SECRET'
 ```
 {% endtab %}
 
 {% tab title="Node.js" %}
 ```javascript
 var axios = require('axios');
-var data = '';
 
 var config = {
   method: 'get',
@@ -66,8 +64,7 @@ var config = {
   headers: { 
     'pinning_api_key': 'KEY', 
     'pinning_secret_key': 'SECRET'
-  },
-  data : data
+  }
 };
 
 axios(config)
@@ -114,11 +111,9 @@ func main() {
   url := "https://api-ipfs.attoaioz.cyou/api/billing/historyUsage?offset=0&limit=10"
   method := "GET"
 
-  payload := strings.NewReader(``)
-
   client := &http.Client {
   }
-  req, err := http.NewRequest(method, url, payload)
+  req, err := http.NewRequest(method, url, nil)
 
   if err != nil {
     fmt.Println(err)

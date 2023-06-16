@@ -50,15 +50,13 @@ curl --location --request GET 'https://api-ipfs.attoaioz.cyou/api/apiKeys/list' 
 {% tab title="Node.js" %}
 ```javascript
 var axios = require('axios');
-var data = '';
 
 var config = {
   method: 'get',
   url: 'https://api-ipfs.attoaioz.cyou/api/apiKeys/list',
   headers: { 
     'Authorization': 'Bearer JWT'
-  },
-  data : data
+  }
 };
 
 axios(config)
@@ -105,11 +103,9 @@ func main() {
   url := "https://api-ipfs.attoaioz.cyou/api/apiKeys/list"
   method := "GET"
 
-  payload := strings.NewReader(``)
-
   client := &http.Client {
   }
-  req, err := http.NewRequest(method, url, payload)
+  req, err := http.NewRequest(method, url, nil)
 
   if err != nil {
     fmt.Println(err)
