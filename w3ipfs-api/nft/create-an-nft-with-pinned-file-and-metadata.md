@@ -4,6 +4,25 @@ description: /api/nft/
 
 # Create an NFT with pinned file and metadata
 
+The metadata JSON file will look like this:
+
+```
+{
+    "name": "My Awesome NFT",
+    "description": "This is an NFT that represents my creativity as a digital artist!",
+    "properties": [
+        {
+            "trait_type": "Color",
+            "value": "Red"
+        },
+        {
+            "trait_type": "Rarity",
+            "value": "Medium"
+        }
+    ]
+}
+```
+
 {% swagger method="post" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/nft/" summary="" %}
 {% swagger-description %}
 
