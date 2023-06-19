@@ -1,6 +1,6 @@
 # 📂 What is IPFS?
 
-IPFS stands for InterPlanetary File System. It is a protocol and distributed file system designed to create a decentralized and more resilient internet infrastructure. IPFS aims to replace the traditional client-server model of the web with a peer-to-peer network.
+IPFS stands for InterPlanetary File System. It is a protocol and distributed file system designed to create a decentralized and more resilient Internet infrastructure. IPFS aims to replace the traditional client-server model of the web with a peer-to-peer network.
 
 In IPFS, files and all other forms of data are identified by unique cryptographic hashes, which allow for content-addressing. Instead of referring to files by their location or specific server, IPFS uses content-based addressing to fetch data based on its hash. This means that the same file will always have the same hash, regardless of where it is stored or accessed from.
 
