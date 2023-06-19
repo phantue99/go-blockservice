@@ -18,7 +18,7 @@ PINNING-SECRET-KEY
 {% endswagger-parameter %}
 
 {% swagger-parameter in="path" name="nftId" required="true" %}
-
+nftId
 {% endswagger-parameter %}
 
 {% swagger-response status="200: OK" description="" %}

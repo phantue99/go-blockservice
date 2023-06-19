@@ -15,4 +15,4 @@ The W3IPFS public gateway allows users to access content stored on the IPFS netw
 
 Important Considerations:
 
-* Limitations: The W3IPFS public gateway has usage limitations and may enforce rate limits or performance restrictions during peak usage. For high-traffic applications or unrestricted access, consider using the [Dedicated IPFS gateway](dedicated-gateways.md).
+* Limitations: The W3IPFS public gateway has usage limitations and may enforce rate limits or performance restrictions during peak usage. For high-traffic applications or unrestricted access, consider using the [**Dedicated IPFS gateway**](dedicated-gateways.md).

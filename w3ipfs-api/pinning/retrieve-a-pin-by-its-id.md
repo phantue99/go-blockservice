@@ -17,7 +17,7 @@ PINNING-API-KEY
 PINNING-SECRET-KEY
 {% endswagger-parameter %}
 
-{% swagger-parameter in="path" required="true" %}
+{% swagger-parameter in="path" required="true" name="pinId" %}
 pinId
 {% endswagger-parameter %}
 

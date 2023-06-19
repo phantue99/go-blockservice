@@ -14,11 +14,11 @@ PINNING-API-KEY
 {% endswagger-parameter %}
 
 {% swagger-parameter in="query" name="offset" %}
-
+(default 0)
 {% endswagger-parameter %}
 
 {% swagger-parameter in="query" name="limit" %}
-
+(default 10)
 {% endswagger-parameter %}
 
 {% swagger-parameter in="header" name="pinning_secret_key" required="true" %}
@@ -26,15 +26,15 @@ PINNING-SECRET-KEY
 {% endswagger-parameter %}
 
 {% swagger-parameter in="query" name="pinned" %}
-
+Filter by pinned status (options: all, true, false) (default all)
 {% endswagger-parameter %}
 
 {% swagger-parameter in="query" name="sortBy" %}
-
+Field to sort by (options: created_at, size, name). Defaults to created_at
 {% endswagger-parameter %}
 
 {% swagger-parameter in="query" name="sortOrder" %}
-
+Sort direction (options: ASC, DESC). Defaults to DESC
 {% endswagger-parameter %}
 
 {% swagger-response status="200: OK" description="" %}

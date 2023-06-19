@@ -10,7 +10,7 @@ description: /api/billing/thisMonthUsage/
 {% endswagger-description %}
 
 {% swagger-parameter in="query" name="offset" %}
-
+(default: 0)
 {% endswagger-parameter %}
 
 {% swagger-parameter in="header" name="pinning_api_key" required="true" %}
@@ -18,7 +18,7 @@ PINNING-API-KEY
 {% endswagger-parameter %}
 
 {% swagger-parameter in="query" name="limit" %}
-
+(default: 10)
 {% endswagger-parameter %}
 
 {% swagger-parameter in="header" name="pinning_secret_key" required="true" %}
