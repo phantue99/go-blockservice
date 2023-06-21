@@ -4,7 +4,6 @@
   * [💡 What is W3IPFS?](what-can-i-learn-here/what-is-w3ipfs/README.md)
     * [📂 What is IPFS?](what-can-i-learn-here/what-is-w3ipfs/what-is-ipfs.md)
     * [📌 What does "pinning" mean?](what-can-i-learn-here/what-is-w3ipfs/what-does-pinning-mean.md)
-  * [🏌♂ Pinning your first file with W3IPFS](what-can-i-learn-here/pinning-your-first-file-with-w3ipfs.md)
 * [🧑💻 Getting Started](getting-started.md)
 * [💪 FAQ](faq.md)
 * [🤝 Limit](limit.md)
