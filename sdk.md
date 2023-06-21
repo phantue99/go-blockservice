@@ -4,7 +4,7 @@ description: aioz-w3ipfs-sdk-test
 
 # ✊ SDK
 
-## W3IPFS API Node SDKKK
+## W3IPFS API Node SDK
 
 The official[ ](w3ipfs-api/)[**W3IPFS API**](w3ipfs-api/) Node.js SDK. This is the easiest way to start developing with W3IPFS.&#x20;
 
