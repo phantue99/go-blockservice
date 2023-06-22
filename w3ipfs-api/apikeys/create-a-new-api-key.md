@@ -52,12 +52,8 @@ For example, this would be a simplified body for admin key generation:&#x20;
 
 {% endswagger-description %}
 
-{% swagger-parameter in="header" name="pinning_api_key" required="true" %}
-PINNING-API-KEY
-{% endswagger-parameter %}
-
-{% swagger-parameter in="header" name="pinning_secret_key" required="true" %}
-PINNING-SECRET-KEY
+{% swagger-parameter in="header" name="Authorization" required="true" %}
+JWT
 {% endswagger-parameter %}
 
 {% swagger-parameter in="body" name="name" required="true" %}
