@@ -8,7 +8,7 @@ description: aioz-w3ipfs-sdk-test
 
 The official[ ](w3ipfs-api/)[**W3IPFS API**](w3ipfs-api/) Node.js SDK. This is the easiest way to start developing with W3IPFS.&#x20;
 
-{% embed url="https://www.npmjs.com/package/ipfs-sdk" %}
+{% embed url="https://www.npmjs.com/package/aioz-w3ipfs-sdk" %}
 
 ## W3IPFS PINNING CLI
 
