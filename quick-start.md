@@ -6,8 +6,6 @@ description: >-
 
 # 🧑💻 Quick start
 
-[**Sign in**](https://ipfs.attoaioz.cyou/auth/login) to your W3IPFS account. If you don't have an account, you can create one by [**signing up**](https://ipfs.attoaioz.cyou/auth/register) on the W3IPFS website.
-
 ## Introduction
 
 Welcome to AIOZ W3IPFS Infrastructure, the revolutionary one-stop shop for all your NFT (Non-Fungible Token) storage, and pinning needs. Our platform combines the power of AIOZ Network and IPFS to provide a comprehensive solution for managing your valuable digital assets.
@@ -32,7 +30,7 @@ Navigate to the "Billing" tab. Click on the "Top Up" button. This action will tr
 
 <figure><img src=".gitbook/assets/ipfs-attoaioz-cyou-dashboard-billing-tag-month-usage.png" alt=""><figcaption></figcaption></figure>
 
-Choose the "Pay with AIOZ Native" option. A payment address and QR code will be displayed. Take note of the address or scan the QR code using your wallet application. Use your wallet to send the desired amount of AIOZ tokens to the provided address. Wait for a few minutes while the transaction is confirmed.
+Choose the `Pay with AIOZ Native` option. A payment address and QR code will be displayed. Take note of the address or scan the QR code using your wallet application. Use your wallet to send the desired amount of AIOZ tokens to the provided address. Wait for a few minutes while the transaction is confirmed.
 
 <figure><img src=".gitbook/assets/ipfs-attoaioz-cyou-dashboard-billing-tag-month-usage (1).png" alt=""><figcaption></figcaption></figure>
 
