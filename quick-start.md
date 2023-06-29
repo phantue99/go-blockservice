@@ -54,6 +54,10 @@ W3IPFS offers developer keys for various scenarios. The most common scenario is 
 
 <figure><img src=".gitbook/assets/ipfs-attoaioz-cyou-dashboard-api-keys.png" alt=""><figcaption></figcaption></figure>
 
+Enter a key name for your API Key and click **Create Key**
+
+Make a note of the **Token** field somewhere secure where you know you won't lose it. You can click **Copy** to copy your new API token to your clipboard.
+
 ### Step 5: Uploading Files & Directories via the W3IPFS SDK API
 
 1. Create a new project by making a new directory and initializing a new project using npm. Open your terminal and run the following commands:

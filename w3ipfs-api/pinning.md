@@ -1,6 +1,6 @@
 # Pinning
 
-## Pin a file or folder to IPFS
+## Pin Files or Directory
 
 This API allows you to pin a file to IPFS using the provided pinning API key and secret key.
 
@@ -188,7 +188,7 @@ func main() {
 {% endtab %}
 {% endtabs %}
 
-## Pin a file to IPFS by its CID
+## Pin by CID
 
 The request body when pin a file by CID will look like this:&#x20;
 
@@ -378,7 +378,7 @@ func main() {
 {% endtab %}
 {% endtabs %}
 
-## Retrieve a pin by its ID
+## Get Pin Details by CID
 
 {% swagger method="get" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/pinning/:pinId" summary="" %}
 {% swagger-description %}
@@ -522,7 +522,7 @@ func main() {
 {% endtab %}
 {% endtabs %}
 
-## Retrieve pins associated with a user
+## List Pins of User
 
 
 
@@ -689,7 +689,7 @@ func main() {
 {% endtab %}
 {% endtabs %}
 
-## Unpin a file from IPFS
+## Remove Files (Unpin)
 
 {% swagger method="delete" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/pinning/unpin/:pinId" summary="" %}
 {% swagger-description %}
