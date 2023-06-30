@@ -2,6 +2,8 @@
 
 ## Get list public & dedicated gateways
 
+The IPFS API provides a list of public and dedicated gateways that you can use to access content on the IPFS network. Here is how you can retrieve the list of gateways using the provided API endpoint:
+
 
 
 {% swagger method="get" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/gateways/" summary="" %}
@@ -29,7 +31,7 @@ Filter by type (options: Public, Dedicated, all) (default all)
 PINNING-SECRET-KEY
 {% endswagger-parameter %}
 
-{% swagger-response status="200: OK" description="" %}
+{% swagger-response status="200: OK" description="The response will be in JSON format with the following structure:" %}
 ```json
 {
     "data": {
@@ -145,3 +147,5 @@ func main() {
 ```
 {% endtab %}
 {% endtabs %}
+
+Please replace `YOUR_API_KEY` and `YOUR_SECRET_KEY` with your actual pinning API key and secret key.

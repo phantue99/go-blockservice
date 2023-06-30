@@ -380,6 +380,8 @@ func main() {
 
 ## Get Pin Details by pinID
 
+This code snippet makes a GET request to the `/pinning/{pinId}` endpoint, where `{pinId}` is the ID of the pin you want to retrieve information for.
+
 {% swagger method="get" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/pinning/:pinId" summary="" %}
 {% swagger-description %}
 
@@ -424,6 +426,8 @@ pinId
 ```
 {% endswagger-response %}
 {% endswagger %}
+
+
 
 {% tabs %}
 {% tab title="cURL" %}
