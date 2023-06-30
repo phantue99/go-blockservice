@@ -21,3 +21,34 @@ Remember, the process of finding the IPFS address may vary depending on the plat
 
 ## Option: Retrieve using IPFS HTTP gateways
 
+W3IPFS provides a reliable and efficient IPFS pinning service that allows you to securely store and access your IPFS data. As part of our service, we offer two types of gateway options: public gateways and dedicated gateways.
+
+1. Public Gateways:
+   * Gateway URL: [https://gateway-ipfs.attoaioz.cyou/ipfs/](https://gateway-ipfs.attoaioz.cyou/ipfs/)
+
+Our public gateway allows you to access IPFS content using the HTTP protocol. To retrieve content, simply replace the `ipfs://` prefix in your IPFS address with the public gateway URL. For example, if you have an IPFS address `ipfs://<CID>`, you can access the content using the following URL: `https://gateway-ipfs.attoaioz.cyou/ipfs/<CID>`. This URL will take you to the desired IPFS content.
+
+2. Dedicated Gateways:
+   * Gateway URL: [https://dedicated-gateway-ipfs.attoaioz.cyou/ipfs/](https://dedicated-gateway-ipfs.attoaioz.cyou/ipfs/)
+
+In addition to our public gateway, we offer dedicated gateways for users who require enhanced performance and reliability. These gateways are optimized to handle your specific IPFS needs. To use a dedicated gateway, replace the `ipfs://` prefix in your IPFS address with the dedicated gateway URL. For example, if your IPFS address is `ipfs://<CID>`, you can access the content using the following URL: `https://dedicated-gateway-ipfs.attoaioz.cyou/ipfs/<CID>`.
+
+Using either the public or dedicated gateway, you can easily retrieve IPFS content by simply modifying the URL. This way, you can seamlessly integrate IPFS into your web applications and provide a smooth browsing experience for your users.
+
+## Option: Running IPFS on your computer
+
+<figure><img src="../.gitbook/assets/desktop-status.059adf67.png" alt=""><figcaption></figcaption></figure>
+
+W3IPFS provides a convenient and reliable IPFS pinning service that allows you to interact with the IPFS peer-to-peer network directly. By installing IPFS on your computer, you can easily access and manage IPFS data using the following steps:
+
+1. Install IPFS:
+   * Visit the official IPFS website and follow the installation instructions specific to your operating system. Once installed, you'll have access to the `ipfs` command.
+2. Download IPFS Data:
+   * To download IPFS data to your local computer, use the `ipfs get` command followed by the CID (Content Identifier) of the desired content. For example, run `ipfs get <CID>` to download the referenced data. You can also specify a path after the CID to download a specific file. For instance, running `ipfs get bafy.../image.png`will download the file named "image.png" to your local machine.
+3. Pin IPFS Content:
+   * If you want to make the downloaded content available to other users on the IPFS network, you can add it to your local IPFS "repository" and "pin" the content. Use the `ipfs pin add` command followed by the CID to instruct your local IPFS node to fetch and pin the content. For example, run `ipfs pin add bafy...` to pin the content associated with the provided CID.
+
+By pinning IPFS content, you contribute to the availability and distribution of the data across the IPFS network, allowing other users to fetch it directly from your computer.
+
+Using the W3IPFS pinning service, you can seamlessly integrate with the IPFS network, manage your IPFS data, and contribute to the decentralized nature of the network. Enjoy the benefits of IPFS and explore the endless possibilities it offers.
+
