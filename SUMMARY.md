@@ -18,7 +18,7 @@
   * [ApiKeys](w3ipfs-api/apikeys.md)
   * [Pinning](w3ipfs-api/pinning.md)
   * [Nft](w3ipfs-api/nft.md)
-  * [Gateway](w3ipfs-api/gateway.md)
+  * [Gateways](w3ipfs-api/gateways.md)
   * [Pinning Services API](w3ipfs-api/pinning-services-api.md)
   * [Billing](w3ipfs-api/billing.md)
 * [🚪 Gateway](page-1.md)
