@@ -11,6 +11,7 @@
 * [✍ Tutorials](tutorials/README.md)
   * [Store and mint NFTs using ERC-1155 metadata standards](tutorials/store-and-mint-nfts-using-erc-1155-metadata-standards.md)
   * [Store and mint NFTs using custom metadata](tutorials/store-and-mint-nfts-using-custom-metadata.md)
+  * [Getting upload status](tutorials/getting-upload-status.md)
   * [Store a directory of files](tutorials/store-a-directory-of-files.md)
   * [Retrieve NFT data from IPFS](tutorials/retrieve-nft-data-from-ipfs.md)
 * [👊 W3IPFS API](w3ipfs-api/README.md)

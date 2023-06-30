@@ -378,7 +378,7 @@ func main() {
 {% endtab %}
 {% endtabs %}
 
-## Get Pin Details by CID
+## Get Pin Details by pinID
 
 {% swagger method="get" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/pinning/:pinId" summary="" %}
 {% swagger-description %}
