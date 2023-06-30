@@ -6,7 +6,7 @@ To retrieve the off-chain metadata for your NFT, you need to locate its IPFS add
 
 1.  NFT Marketplaces and Explorer Sites: Many NFT marketplaces and explorer sites provide the IPFS address for a token's metadata. For example, on OpenSea, you can find the metadata link under the "Details" view, which includes a link to the "Frozen" metadata stored on IPFS. The metadata link will typically resemble an IPFS gateway URL.
 
-    Example: Metadata Link: [https://ipfs.io/ipfs/bafkreigfvngoydofemwj5x5ioqsaqarvlprzgxinkcv3am3jpv2sysqobi](https://ipfs.io/ipfs/bafkreigfvngoydofemwj5x5ioqsaqarvlprzgxinkcv3am3jpv2sysqobi)
+    Example: Metadata Link: `https://ipfs.io/ipfs/bafkr...`
 
     In the example above, the IPFS gateway URL is "[https://ipfs.io](https://ipfs.io)," and the Content Identifier (CID) is the random-looking string after "/ipfs/" in the link.
 
@@ -66,10 +66,10 @@ Replace YOUR\_CID with the CID you found above, and FILENAME with your preferred
 
 If you don't have IPFS running locally, you can use the following curl command to export a CAR using the W3IPFS gateway:
 
-```sql
-curl -X GET 'https://gateway-ipfs.attoaioz.cyou/ipfs/{CID}/?format=car' --output FILENAME.car
+```url
+curl -X GET 'https://gateway-ipfs.attoaioz.cyou/ipfs/{CID}/?format=car'
 ```
 
-Replace {CID} with the CID you found above, and FILENAME with your desired name for the archive file. This command will download the CAR file from the W3IPFS gateway.
+Replace {CID} with the CID you found above. This command will download the CAR file from the W3IPFS gateway.
 
 By following these steps, you can create an archival copy of your NFT data using the W3IPFS pinning service. This ensures that you have control over your data and can preserve the integrity of your NFTs even if the original IPFS links become inaccessible.
