@@ -10,8 +10,8 @@ To create the blockchain record for your NFT, you first need to store all the of
 
 ### Storing Asset Files:&#x20;
 
-* [`pinFile`](../w3ipfs-api/pinning.md#pin-files-or-directory): Accepts a File object and returns the Content Identifier (CID) of the uploaded file. Note that the original filename and content type information are not preserved.
-* [`storeDirectory`](../w3ipfs-api/pinning.md#pin-files-or-directory): Accepts multiple File objects and creates an IPFS directory listing, allowing you to link to files using human-readable names as the "path" component of IPFS URIs. It returns the CID of the directory listing.
+* `pinFile`: Accepts a File object and returns the Content Identifier (CID) of the uploaded file. Note that the original filename and content type information are not preserved.
+* `pinFolder`: Accepts multiple File objects and creates an IPFS directory listing, allowing you to link to files using human-readable names as the "path" component of IPFS URIs. It returns the CID of the directory listing.
 
 ### Preparing Custom Metadata:
 
