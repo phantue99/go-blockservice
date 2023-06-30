@@ -1,7 +1,3 @@
----
-description: aioz-w3ipfs-sdk-test
----
-
 # ✊ SDK
 
 ## W3IPFS API Node SDK
