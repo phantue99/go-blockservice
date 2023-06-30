@@ -21,7 +21,7 @@ Pinning your content with W3IPFS offers you peace of mind, knowing that your val
 
 To explore the pricing details for w3ipfs Pinning Service, please refer to our dedicated pricing page.
 
-### **We value your feedback!**
+## **We value your feedback!**
 
 We are committed to making W3IPFS Pinning Service the best product available, and your feedback is invaluable in achieving that goal. If you have any suggestions, complaints, or questions regarding our documentation or services, please don't hesitate to reach out to us via email at [`support@aioz.io`](mailto:support@aioz.io) We are here to listen and assist you in every way we can.
 
