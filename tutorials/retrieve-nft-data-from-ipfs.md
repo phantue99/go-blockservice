@@ -67,9 +67,9 @@ Replace YOUR\_CID with the CID you found above, and FILENAME with your preferred
 If you don't have IPFS running locally, you can use the following curl command to export a CAR using the W3IPFS gateway:
 
 ```url
-curl -X GET 'https://gateway-ipfs.attoaioz.cyou/ipfs/{CID}/?format=car'
+curl -X GET 'https://gateway-ipfs.attoaioz.cyou/ipfs/{CID}/?format=car' --output FILENAME.car
 ```
 
-Replace {CID} with the CID you found above. This command will download the CAR file from the W3IPFS gateway.
+Replace {CID} with the CID you found above, and FILENAME with your desired name for the archive file. This command will download the CAR file from the W3IPFS gateway.
 
 By following these steps, you can create an archival copy of your NFT data using the W3IPFS pinning service. This ensures that you have control over your data and can preserve the integrity of your NFTs even if the original IPFS links become inaccessible.
