@@ -2,7 +2,7 @@
 
 ## Pinning Services API
 
-The Pinning Services API is a standardized specification for developers who want to build applications on top of IPFS. It allows seamless integration with a pinning service without requiring knowledge of the service's unique API.
+The Pinning Services API is a standardized specification for developers who want to build applications on top of [IPFS](https://ipfs.tech/). It allows seamless integration with a pinning service without requiring knowledge of the service's unique API.
 
 ### Endpoint
 
@@ -10,7 +10,7 @@ W3IPFS users looking to utilize the IPFS Pinning Services API can do so from the
 
 ## Authentication
 
-To authenticate with W3IPFS through the Pinning Services API spec, you'll need to obtain an `accessToken`. To obtain an access token for authentication with the W3ipfs Pinning Services API, you can use Postman to make a POST request to the following API endpoint:
+To authenticate with W3IPFS through the Pinning Services API spec, you'll need to obtain an `access_token`. To obtain an access token for authentication with the W3ipfs Pinning Services API, you can use Postman to make a POST request to the following API endpoint:
 
 {% swagger method="post" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/auth/login" summary="" %}
 {% swagger-description %}
@@ -38,9 +38,9 @@ Your password
 
 ## Using the IPFS CLI
 
-To use the W3IPFS Pinning Service with the IPFS CLI, you can follow these steps:
+To use the W3IPFS Pinning Service with the [IPFS CLI](https://docs.ipfs.io/reference/kubo/cli/), you can follow these steps:
 
-1. Add W3IPFS credentials: Before you can start pinning to the W3IPFS Pinning Service, you need to add your authentication credentials. Replace `YOUR_AUTH_JWT` in the following command with your actual API key.
+1. Add W3IPFS credentials: Before you can start pinning to the W3IPFS Pinning Service, you need to add your authentication credentials. Replace `YOUR_AUTH_JWT` in the following command with your actual JWT.
 
 ```
 ipfs pin remote service add w3ipfs https://api-ipfs.attoaioz.cyou/api/psa/ YOUR_AUTH_JWT
@@ -69,3 +69,5 @@ ipfs pin remote ls --service=w3ipfs --status=queued,pinning,failed
 ```
 ipfs pin remote --help
 ```
+
+See more extensive documentation in the [IPFS Docs](https://docs.ipfs.tech/reference/kubo/cli/).
