@@ -1,2 +1,0 @@
-# AIOZ Network dCDN
-
