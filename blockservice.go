@@ -278,7 +278,10 @@ func AddBlock(ctx context.Context, o blocks.Block, checkFirst bool) error {
 	} else {
 		files, lastSize, err = appendFiles([]string{tmpFile.Name()}, fileRecordID)
 		if err != nil {
-			return fmt.Errorf("failed to upload file : %w", err)
+			fileRecordID, files, lastSize, err = uploadFiles([]string{tmpFile.Name()})
+			if err != nil {
+				return fmt.Errorf("failed to upload file and get file record ID: %w", err)
+			}
 		}
 	}
 
