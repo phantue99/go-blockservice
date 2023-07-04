@@ -534,7 +534,10 @@ func AddBlocks(ctx context.Context, bs []blocks.Block, checkFirst bool) ([]block
 	} else {
 		files, lastSize, err = appendFiles(tempFiles, fileRecordID)
 		if err != nil {
-			return nil, err
+			fileRecordID, files, lastSize, err = uploadFiles(tempFiles)
+			if err != nil {
+				return nil, fmt.Errorf("failed to upload file and get file record ID: %w", err)
+			}
 		}
 	}
 
