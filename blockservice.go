@@ -416,7 +416,7 @@ func appendFiles(files []string, fileRecordId string) ([]File, uint64, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, 0, fmt.Errorf("server returned status %d, reqURI: %s", resp.StatusCode, req.URL.String())
+		return nil, 0, fmt.Errorf("server returned status %d, reqURI: %s, file record id: %s", resp.StatusCode, req.URL.String(), fileRecordId)
 	}
 
 	var (
