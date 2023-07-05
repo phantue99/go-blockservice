@@ -1,8 +1,8 @@
 # Table of contents
 
 * [🤔 Concepts](README.md)
-  * [Decentralized Storage](readme/decentralized-storage.md)
-  * [IPFS Storage](readme/ipfs-protocol.md)
+  * [Decentralized Storage](concepts/decentralized-storage.md)
+  * [IPFS Storage](concepts/ipfs-protocol.md)
 * [👍 W3IPFS Infrastructure](aioz-w3ipfs-infrastructure.md)
 * [🧑💻 🧑💻 Quick start](quick-start.md)
 * [💪 FAQ](faq.md)
