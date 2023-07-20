@@ -23,7 +23,7 @@ For users with burst-heavy traffic patterns, it is advisable to implement a task
 
 The W3IPFS gateway provides both public and dedicated gateways for retrieving content from the IPFS network. Please note the following rate limits for each gateway type:
 
-### Public Gateway Rate Limits:
+### Public Gateway Rate Limits
 
 The public IPFS gateway is primarily intended for testing purposes or scenarios with very low retrieval volumes. It is not suitable for production use. The current rate limits for the public gateway are as follows:
 

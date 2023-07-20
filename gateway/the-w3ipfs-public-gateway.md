@@ -6,7 +6,7 @@ description: >-
 
 # The W3IPFS Public Gateway
 
-## W3IPFS Public Gateway:
+## W3IPFS Public Gateway
 
 The W3IPFS public gateway allows users to access content stored on the IPFS network without running their own IPFS node. It provides a convenient way to retrieve IPFS content through a publicly accessible endpoint. Here's what you need to know:
 
