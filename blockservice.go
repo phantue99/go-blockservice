@@ -23,7 +23,6 @@ import (
 	"go.opentelemetry.io/otel/trace"
 
 	blocks "github.com/ipfs/go-block-format"
-	"github.com/ipfs/go-blockservice/tikv"
 	cid "github.com/ipfs/go-cid"
 	blockstore "github.com/ipfs/go-ipfs-blockstore"
 	exchange "github.com/ipfs/go-ipfs-exchange-interface"
@@ -32,6 +31,7 @@ import (
 	"github.com/ipfs/go-verifcid"
 
 	"github.com/ipfs/go-blockservice/internal"
+	"github.com/redis/go-redis/v9"
 )
 
 var logger = logging.Logger("blockservice")
@@ -100,6 +100,7 @@ var (
 	pinningService     string
 	apiKey             string
 	isDedicatedGateway bool
+	rdb                *redis.ClusterClient
 )
 
 func InitBlockService(uploaderURL, pinningServiceURL, _apiKey string, _isDedicatedGateway bool) error {
@@ -118,7 +119,13 @@ func InitBlockService(uploaderURL, pinningServiceURL, _apiKey string, _isDedicat
 	if uploader == "" || pinningService == "" || apiKey == "" {
 		return errors.New("error: empty url or api key")
 	}
+	rdb := redis.NewClusterClient(&redis.ClusterOptions{
+		Addrs: []string{":7001", ":7002", ":7003", ":7004", ":7005", ":7006"},
+	})
 
+	ctx := context.Background()
+
+	rdb.Ping(ctx)
 	return nil
 }
 
@@ -183,10 +190,6 @@ func NewSession(ctx context.Context, bs BlockService) *Session {
 	}
 }
 
-type TikvUser struct {
-	FileRecordID string
-}
-
 type ZipReader struct {
 	File []File
 }
@@ -222,11 +225,11 @@ func AddBlock(ctx context.Context, o blocks.Block, checkFirst bool) error {
 	var fr fileRecord
 	userID, _ := ctx.Value("userID").(string)
 	if userID != "" {
-		userKV, err := tikv.Get([]byte(userID))
+		userKV, err := rdb.Get(ctx, userID).Bytes()
 		if err != nil {
 			return nil
 		} else {
-			if err := json.Unmarshal(userKV.V, &fr); err != nil {
+			if err := json.Unmarshal(userKV, &fr); err != nil {
 				return err
 			}
 		}
@@ -239,7 +242,7 @@ func AddBlock(ctx context.Context, o blocks.Block, checkFirst bool) error {
 	}
 
 	if checkFirst {
-		_, err := tikv.Get(c.Hash())
+		_, err := rdb.Get(ctx, c.Hash().HexString()).Result()
 		if err == nil {
 			return nil
 		}
@@ -290,8 +293,8 @@ func AddBlock(ctx context.Context, o blocks.Block, checkFirst bool) error {
 	if err != nil {
 		return fmt.Errorf("failed to marshal `fileInfo`: %w", err)
 	}
-	if err := tikv.Puts([]byte(userID), []byte(bf)); err != nil {
-		return fmt.Errorf("failed to put data in TiKV: %w", err)
+	if err := rdb.Set(ctx, userID, []byte(bf), 0); err != nil {
+		return fmt.Errorf("failed to put data in Redis: %w", err.Err())
 	}
 
 	for _, f := range files {
@@ -301,8 +304,8 @@ func AddBlock(ctx context.Context, o blocks.Block, checkFirst bool) error {
 			if err != nil {
 				return err
 			}
-			if err := tikv.Puts(o.Cid().Hash(), []byte(fInfoBytes)); err != nil {
-				return err
+			if err := rdb.Set(ctx, o.Cid().Hash().HexString(), fInfoBytes, 0); err != nil {
+				return err.Err()
 			}
 			break
 		}
@@ -440,12 +443,6 @@ func appendFiles(files []string, fileRecordId string) ([]File, uint64, error) {
 	return response.File, lastSize, nil
 }
 
-type TikvBlock struct {
-	FileName     []byte
-	FileRecordID string
-	Range        string
-}
-
 var lock = sync.RWMutex{}
 
 func (s *blockService) AddBlocks(ctx context.Context, bs []blocks.Block) error {
@@ -474,11 +471,11 @@ func AddBlocks(ctx context.Context, bs []blocks.Block, checkFirst bool) ([]block
 
 	userID, _ := ctx.Value("userID").(string)
 	if userID != "" {
-		userKV, err := tikv.Get([]byte(userID))
+		userKV, err := rdb.Get(ctx, userID).Bytes()
 		if err != nil {
 			return toput, nil
 		} else {
-			if err := json.Unmarshal(userKV.V, &fr); err != nil {
+			if err := json.Unmarshal(userKV, &fr); err != nil {
 				return nil, err
 			}
 		}
@@ -494,7 +491,7 @@ func AddBlocks(ctx context.Context, bs []blocks.Block, checkFirst bool) ([]block
 	if checkFirst {
 		toput = make([]blocks.Block, 0, len(bs))
 		for _, b := range bs {
-			_, err := tikv.Get(b.Cid().Hash())
+			_, err := rdb.Get(ctx, b.Cid().Hash().HexString()).Result()
 			if err == nil {
 				continue // Skip already added block
 			} else {
@@ -550,8 +547,8 @@ func AddBlocks(ctx context.Context, bs []blocks.Block, checkFirst bool) ([]block
 		if err != nil {
 			return nil, fmt.Errorf("failed to marshal `fileInfo`: %w", err)
 		}
-		if err := tikv.Puts([]byte(userID), []byte(bf)); err != nil {
-			return nil, fmt.Errorf("failed to put data in TiKV: %w", err)
+		if err := rdb.Set(ctx, userID, bf, 0); err.Err() != nil {
+			return nil, fmt.Errorf("failed to put data in Redis: %w", err.Err())
 		}
 	}
 
@@ -563,8 +560,8 @@ func AddBlocks(ctx context.Context, bs []blocks.Block, checkFirst bool) ([]block
 				if err != nil {
 					return nil, err
 				}
-				if err := tikv.Puts(b.Cid().Hash(), []byte(fInfoBytes)); err != nil {
-					return nil, err
+				if err := rdb.Set(ctx, b.Cid().Hash().HexString(), fInfoBytes, 0); err != nil {
+					return nil, err.Err()
 				}
 			}
 		}
@@ -603,12 +600,12 @@ func getBlock(ctx context.Context, c cid.Cid, bs blockstore.Blockstore, fget fun
 		return nil, err
 	}
 
-	kv1, err := tikv.Get(c.Hash())
+	kv1, err := rdb.Get(ctx, c.Hash().HexString()).Bytes()
 
 	if err == nil {
 		var f fileInfo
 
-		if err := json.Unmarshal(kv1.V, &f); err != nil {
+		if err := json.Unmarshal(kv1, &f); err != nil {
 			return nil, err
 		}
 
@@ -878,11 +875,11 @@ func (s *Session) getFetcherFactory() func() notifiableFetcher {
 	return nil
 }
 func getBlockCdn(ctx context.Context, c cid.Cid) (blocks.Block, error) {
-	kv1, err := tikv.Get(c.Hash())
+	kv1, err := rdb.Get(ctx, c.Hash().HexString()).Bytes()
 	if err == nil {
 		var f fileInfo
 
-		err := json.Unmarshal(kv1.V, &f)
+		err := json.Unmarshal(kv1, &f)
 		if err != nil {
 			return nil, err
 		}
