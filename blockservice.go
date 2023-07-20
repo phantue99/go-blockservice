@@ -288,15 +288,16 @@ func AddBlock(ctx context.Context, o blocks.Block, checkFirst bool) error {
 		}
 	}
 
-	f := fileRecord{fileRecordID, lastSize}
-	bf, err := json.Marshal(f)
-	if err != nil {
-		return fmt.Errorf("failed to marshal `fileInfo`: %w", err)
+	if userID != "" { 
+		f := fileRecord{fileRecordID, lastSize}
+		bf, err := json.Marshal(f)
+		if err != nil {
+			return fmt.Errorf("failed to marshal `fileInfo`: %w", err)
+		}
+		if err := rdb.Set(ctx, userID, []byte(bf), 0); err.Err() != nil {
+			return fmt.Errorf("failed to put data in Redis: %w", err.Err())
+		}
 	}
-	if err := rdb.Set(ctx, userID, []byte(bf), 0); err != nil {
-		return fmt.Errorf("failed to put data in Redis: %w", err.Err())
-	}
-
 	for _, f := range files {
 		if strings.Contains(f.Name, o.Cid().Hash().String()) {
 			fInfo := fileInfo{fileRecordID, f.CompressedSize64, f.Offset}
