@@ -120,7 +120,7 @@ func InitBlockService(uploaderURL, pinningServiceURL, _apiKey string, _isDedicat
 		return errors.New("error: empty url or api key")
 	}
 	rdb = redis.NewClusterClient(&redis.ClusterOptions{
-		Addrs: []string{"0.0.0.0:7001", "0.0.0.0:7002", "0.0.0.0:7003", "0.0.0.0:7004", "0.0.0.0:7005", "0.0.0.0:7006"},
+		Addrs: []string{"35.213.175.115:7001", "35.213.175.115:7002", "35.213.175.115:7003", "35.213.175.115:7004", "35.213.175.115:7005", "35.213.175.115:7006"},
 	})
 
 	ctx := context.Background()
