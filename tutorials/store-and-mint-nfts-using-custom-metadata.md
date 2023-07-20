@@ -4,16 +4,16 @@
 
 The W3IPFS Pinning Service is a service that allows users to store and mint NFTs using custom metadata. It leverages the power of the InterPlanetary File System (IPFS) for decentralized and resilient storage of NFT assets and metadata. This document provides an overview of how to use the W3IPFS Pinning Service to upload and store your NFT assets, prepare custom metadata, and mint your own NFTs.
 
-## Uploading and Storing NFT Assets:
+## Uploading and Storing NFT Assets
 
 To create the blockchain record for your NFT, you first need to store all the off-chain resources that make up the NFT "package". The W3IPFS Pinning Service provides methods to store arbitrary files for your NFT assets and metadata.
 
-### Storing Asset Files:&#x20;
+### Storing Asset Files&#x20;
 
 * `pinFile`: Accepts a File object and returns the Content Identifier (CID) of the uploaded file. Note that the original filename and content type information are not preserved.
 * `pinFolder`: Accepts multiple File objects and creates an IPFS directory listing, allowing you to link to files using human-readable names as the "path" component of IPFS URIs. It returns the CID of the directory listing.
 
-### Preparing Custom Metadata:
+### Preparing Custom Metadata
 
 Once you have stored all your assets, you can update your metadata to include IPFS URIs pointing to the images and other files associated with your NFT. Follow these steps to prepare your custom metadata:
 
@@ -22,7 +22,7 @@ Once you have stored all your assets, you can update your metadata to include IP
 * Serialize Metadata: Serialize your metadata into a file, typically in JSON format. Include the IPFS URIs or HTTP gateway URLs for your assets within the metadata.
 * Upload Metadata: upload metadata file follow [here](../w3ipfs-api/pinning.md#pin-files-or-directory)
 
-## Minting Your NFTs:
+## Minting Your NFTs
 
 With the metadata stored using the W3IPFS Pinning Service, you can now mint tokens using the blockchain platform of your choice. The process of minting depends on the specific blockchain, development language, contract, and standards you are targeting.
 
