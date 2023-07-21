@@ -120,7 +120,7 @@ func InitBlockService(uploaderURL, pinningServiceURL, _apiKey string, _isDedicat
 		return errors.New("error: empty url or api key")
 	}
 	rdb = redis.NewClusterClient(&redis.ClusterOptions{
-		Addrs: []string{"35.213.175.115:7001", "35.213.175.115:7002", "35.213.175.115:7003", "35.213.175.115:7004", "35.213.175.115:7005", "35.213.175.115:7006"},
+		Addrs: []string{"10.148.0.23:7001","10.148.0.23:7002","10.148.0.23:7003", "10.148.0.23:7004","10.148.0.23:7005","10.148.0.23:7006"},
 	})
 
 	ctx := context.Background()
@@ -242,7 +242,7 @@ func AddBlock(ctx context.Context, o blocks.Block, checkFirst bool) error {
 	}
 
 	if checkFirst {
-		_, err := rdb.Get(ctx, c.Hash().HexString()).Result()
+		_, err := rdb.Get(ctx, c.Hash().HexString()).Bytes()
 		if err == nil {
 			return nil
 		}
@@ -294,8 +294,8 @@ func AddBlock(ctx context.Context, o blocks.Block, checkFirst bool) error {
 		if err != nil {
 			return fmt.Errorf("failed to marshal `fileInfo`: %w", err)
 		}
-		if err := rdb.Set(ctx, userID, []byte(bf), 0); err.Err() != nil {
-			return fmt.Errorf("failed to put data in Redis: %w", err.Err())
+		if statusCmd := rdb.Set(ctx, userID, []byte(bf), 0); statusCmd.Err() != nil {
+			return fmt.Errorf("failed to put data in Redis: %w", statusCmd.Err())
 		}
 	}
 	for _, f := range files {
@@ -305,8 +305,8 @@ func AddBlock(ctx context.Context, o blocks.Block, checkFirst bool) error {
 			if err != nil {
 				return err
 			}
-			if err := rdb.Set(ctx, o.Cid().Hash().HexString(), fInfoBytes, 0); err != nil {
-				return err.Err()
+			if statusCmd := rdb.Set(ctx, o.Cid().Hash().HexString(), fInfoBytes, 0); statusCmd.Err() != nil {
+				return statusCmd.Err()
 			}
 			break
 		}
@@ -492,7 +492,7 @@ func AddBlocks(ctx context.Context, bs []blocks.Block, checkFirst bool) ([]block
 	if checkFirst {
 		toput = make([]blocks.Block, 0, len(bs))
 		for _, b := range bs {
-			_, err := rdb.Get(ctx, b.Cid().Hash().HexString()).Result()
+			_, err := rdb.Get(ctx, b.Cid().Hash().HexString()).Bytes()
 			if err == nil {
 				continue // Skip already added block
 			} else {
@@ -548,8 +548,8 @@ func AddBlocks(ctx context.Context, bs []blocks.Block, checkFirst bool) ([]block
 		if err != nil {
 			return nil, fmt.Errorf("failed to marshal `fileInfo`: %w", err)
 		}
-		if err := rdb.Set(ctx, userID, bf, 0); err.Err() != nil {
-			return nil, fmt.Errorf("failed to put data in Redis: %w", err.Err())
+		if statusCmd := rdb.Set(ctx, userID, bf, 0); statusCmd.Err() != nil {
+			return nil, fmt.Errorf("failed to put data in Redis: %w", statusCmd.Err())
 		}
 	}
 
@@ -561,8 +561,8 @@ func AddBlocks(ctx context.Context, bs []blocks.Block, checkFirst bool) ([]block
 				if err != nil {
 					return nil, err
 				}
-				if err := rdb.Set(ctx, b.Cid().Hash().HexString(), fInfoBytes, 0); err != nil {
-					return nil, err.Err()
+				if statusCmd := rdb.Set(ctx, b.Cid().Hash().HexString(), fInfoBytes, 0); statusCmd.Err() != nil {
+					return nil, statusCmd.Err()
 				}
 			}
 		}
