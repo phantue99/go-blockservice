@@ -1,10 +1,10 @@
 # Table of contents
 
-* [🤔 Concepts](README.md)
+* [🧑💻 🧑💻 Quick start](README.md)
+* [🤔 Concepts](<README (1).md>)
   * [Decentralized Storage](concepts/decentralized-storage.md)
   * [IPFS Storage](concepts/ipfs-protocol.md)
 * [👍 W3IPFS Infrastructure](aioz-w3ipfs-infrastructure.md)
-* [🧑💻 🧑💻 Quick start](quick-start.md)
 * [✍ Tutorials](tutorials/README.md)
   * [Store and mint NFTs using ERC-1155 metadata standards](tutorials/store-and-mint-nfts-using-erc-1155-metadata-standards.md)
   * [Store and mint NFTs using custom metadata](tutorials/store-and-mint-nfts-using-custom-metadata.md)
