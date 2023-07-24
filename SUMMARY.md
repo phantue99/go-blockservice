@@ -18,7 +18,7 @@
   * [Gateways](w3ipfs-api/gateways.md)
   * [Pinning Services API](w3ipfs-api/pinning-services-api.md)
   * [Billing](w3ipfs-api/billing.md)
-* [🚪 Gateway](page-1.md)
+* [🚪 Gateway](gateway/README.md)
   * [Understanding Gateways and their Importance in IPFS](gateway/understanding-gateways-and-their-importance-in-ipfs.md)
   * [The W3IPFS Public Gateway](gateway/the-w3ipfs-public-gateway.md)
   * [Dedicated Gateways](gateway/dedicated-gateways.md)
