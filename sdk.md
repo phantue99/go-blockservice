@@ -14,31 +14,55 @@ This application provides a Command Line Interface for Pinning APIs.
 
 ### Command line login
 
-`pinning login --key "your_key" --secret "your_secret"`
+```
+pinning login --key "your_key" --secret "your_secret"
+```
 
 ### Example usage
 
-**You can pin a file**\
-`pinning pin --file afile.txt`
+**You can pin a file**
 
-**You can pin a whole directory**\
-`pinning pin --file ../some/where`
+```
+pinning pin --file afile.txt
+```
 
-**You can choose add metadata for your own usage**\
-`pinning pin --file afile.txt --keyvalue key1:value1 --keyvalue key2:value2`
+**You can pin a whole directory**
 
-**Add a hash to be pinned**\
-`pinning pin --hash QmdYTBNig2d4dQd5o1LXM3NHbCYA7168NpN5R9m44vDj88 --keyvalue key1:value1 --keyvalue key2:value2`
+```
+pinning pin --file ../some/where
+```
 
-**Get pin by id**\
-`pinning get-pin --id=00000000-0000-0000-0000-000000000000`
+**You can choose add metadata for your own usage**
 
-**Or list all your pins**\
-`pinning list-pins`
+```
+pinning pin --file afile.txt --keyvalue key1:value1 --keyvalue key2:value2
+```
 
-**Or your custom**\
-`pinning list-pins --pinned=true --sortBy=created_at --sortOrder=DESC --limit=10 --offset=0 --keyvalue=key1:value1 --keyvalue=key2:value2`
+**Add a hash to be pinned**
 
-**And finally unpin a hash by its ID**\
-`pinning unpin --id=00000000-0000-0000-0000-000000000000`
+```
+pinning pin --hash QmdYTBNig2d4dQd5o1LXM3NHbCYA7168NpN5R9m44vDj88 --keyvalue key1:value1 --keyvalue key2:value2
+```
 
+**Get pin by id**
+
+```
+pinning get-pin --id=00000000-0000-0000-0000-000000000000
+```
+
+**Or list all your pins**
+
+```
+pinning list-pins
+```
+
+**Or your custom**
+
+```
+pinning list-pins --pinned=true --sortBy=created_at --sortOrder=DESC --limit=10 --offset=0 --keyvalue=key1:value1 --keyvalue=key2:value2
+```
+
+**And finally unpin a hash by its ID**
+
+<pre><code><strong>pinning unpin --id=00000000-0000-0000-0000-00000000000
+</strong></code></pre>
