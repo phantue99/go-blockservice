@@ -64,5 +64,6 @@ pinning list-pins --pinned=true --sortBy=created_at --sortOrder=DESC --limit=10 
 
 **And finally unpin a hash by its ID**
 
-<pre><code><strong>pinning unpin --id=00000000-0000-0000-0000-00000000000
-</strong></code></pre>
+```
+pinning unpin --id=00000000-0000-0000-0000-00000000000
+```
