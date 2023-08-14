@@ -10,7 +10,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"mime/multipart"
 	"net/http"
 	"net/url"
@@ -120,7 +119,7 @@ func InitBlockService(uploaderURL, pinningServiceURL, _apiKey string, _isDedicat
 		return errors.New("error: empty url or api key")
 	}
 	rdb = redis.NewClusterClient(&redis.ClusterOptions{
-		Addrs: []string{"10.148.0.23:7001","10.148.0.23:7002","10.148.0.23:7003", "10.148.0.23:7004","10.148.0.23:7005","10.148.0.23:7006"},
+		Addrs: []string{"10.148.0.23:7001", "10.148.0.23:7002", "10.148.0.23:7003", "10.148.0.23:7004", "10.148.0.23:7005", "10.148.0.23:7006"},
 	})
 
 	ctx := context.Background()
@@ -241,11 +240,9 @@ func AddBlock(ctx context.Context, o blocks.Block, checkFirst bool) error {
 		return err
 	}
 
-	if checkFirst {
-		_, err := rdb.Get(ctx, c.Hash().HexString()).Bytes()
-		if err == nil {
-			return nil
-		}
+	_, err := rdb.Get(ctx, c.Hash().HexString()).Bytes()
+	if err == nil {
+		return nil
 	}
 
 	hash, err := internal.GetHashStringFromCid(c.String())
@@ -288,7 +285,7 @@ func AddBlock(ctx context.Context, o blocks.Block, checkFirst bool) error {
 		}
 	}
 
-	if userID != "" { 
+	if userID != "" {
 		f := fileRecord{fileRecordID, lastSize}
 		bf, err := json.Marshal(f)
 		if err != nil {
@@ -489,18 +486,15 @@ func AddBlocks(ctx context.Context, bs []blocks.Block, checkFirst bool) ([]block
 			return nil, err
 		}
 	}
-	if checkFirst {
-		toput = make([]blocks.Block, 0, len(bs))
-		for _, b := range bs {
-			_, err := rdb.Get(ctx, b.Cid().Hash().HexString()).Bytes()
-			if err == nil {
-				continue // Skip already added block
-			} else {
-				toput = append(toput, b)
-			}
+
+	toput = make([]blocks.Block, 0, len(bs))
+	for _, b := range bs {
+		_, err := rdb.Get(ctx, b.Cid().Hash().HexString()).Bytes()
+		if err == nil {
+			continue // Skip already added block
+		} else {
+			toput = append(toput, b)
 		}
-	} else {
-		toput = bs
 	}
 
 	if len(toput) == 0 {
@@ -633,7 +627,7 @@ func getBlock(ctx context.Context, c cid.Cid, bs blockstore.Blockstore, fget fun
 			return nil, err
 		}
 
-		bdata, err := ioutil.ReadAll(resp.Body)
+		bdata, err := io.ReadAll(resp.Body)
 		if err != nil {
 			logger.Debugf("Failed read body %v", err)
 			return nil, err
@@ -907,7 +901,7 @@ func getBlockCdn(ctx context.Context, c cid.Cid) (blocks.Block, error) {
 			addBandwidthUsage(f.Size, hash)
 		}
 
-		bdata, err := ioutil.ReadAll(resp.Body)
+		bdata, err := io.ReadAll(resp.Body)
 		if err == nil {
 			return blocks.NewBlockWithCid(bdata, c)
 		}
