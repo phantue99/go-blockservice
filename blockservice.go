@@ -271,14 +271,14 @@ func AddBlock(ctx context.Context, o blocks.Block, checkFirst bool) error {
 		files        []File
 	)
 	if fr.FileRecordID == "" || fr.Size > 100*1024*1024 {
-		fileRecordID, files, lastSize, err = uploadFiles([]string{tmpFile.Name()})
+		fileRecordID, files, lastSize, err = uploadFiles([]string{tmpFile.Name()}, userID)
 		if err != nil {
 			return fmt.Errorf("failed to upload file and get file record ID: %w", err)
 		}
 	} else {
 		files, lastSize, err = appendFiles([]string{tmpFile.Name()}, fileRecordID)
 		if err != nil {
-			fileRecordID, files, lastSize, err = uploadFiles([]string{tmpFile.Name()})
+			fileRecordID, files, lastSize, err = uploadFiles([]string{tmpFile.Name()}, userID)
 			if err != nil {
 				return fmt.Errorf("failed to upload file and get file record ID: %w", err)
 			}
@@ -314,7 +314,7 @@ func AddBlock(ctx context.Context, o blocks.Block, checkFirst bool) error {
 	return nil
 }
 
-func uploadFiles(files []string) (string, []File, uint64, error) {
+func uploadFiles(files []string, userID string) (string, []File, uint64, error) {
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
 	// Iterate over files and add them as form parts
@@ -371,6 +371,21 @@ func uploadFiles(files []string) (string, []File, uint64, error) {
 		}
 		fileRecordID = response.FileRecord.ID
 		size = response.ZipReader.File[len(files)-1].Offset + response.ZipReader.File[len(files)-1].UncompressedSize64
+	}
+	if userID != "" {
+		// Call the API to create a new file record
+		apiUrl := fmt.Sprintf("%s/api/filerecords/", pinningService)
+		reqBody, _ := json.Marshal(map[string]interface{}{
+			"user_id":        userID,
+			"file_record_id": fileRecordID,
+		})
+		reqCreateRecord, _ := http.NewRequest("POST", apiUrl, bytes.NewBuffer(reqBody))
+		reqCreateRecord.Header.Set("blockservice-API-Key", apiKey)
+		reqCreateRecord.Header.Set("Content-Type", "application/json")
+		_, err = client.Do(reqCreateRecord)
+		if err != nil {
+			return "", nil, 0, fmt.Errorf("failed to create file record: %w", err)
+		}
 	}
 	return fileRecordID, response.ZipReader.File, size, nil
 }
@@ -522,14 +537,14 @@ func AddBlocks(ctx context.Context, bs []blocks.Block, checkFirst bool) ([]block
 		files        []File
 	)
 	if fr.FileRecordID == "" || fr.Size > 100*1024*1024 {
-		fileRecordID, files, lastSize, err = uploadFiles(tempFiles)
+		fileRecordID, files, lastSize, err = uploadFiles(tempFiles, userID)
 		if err != nil {
 			return nil, fmt.Errorf("failed to upload file and get file record ID: %w", err)
 		}
 	} else {
 		files, lastSize, err = appendFiles(tempFiles, fileRecordID)
 		if err != nil {
-			fileRecordID, files, lastSize, err = uploadFiles(tempFiles)
+			fileRecordID, files, lastSize, err = uploadFiles(tempFiles, userID)
 			if err != nil {
 				return nil, fmt.Errorf("failed to upload file and get file record ID: %w", err)
 			}
