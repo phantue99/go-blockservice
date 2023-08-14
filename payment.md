@@ -1,10 +1,10 @@
-# 💰 Billing
+# 💰 Payment
 
 ### Wallet Information
 
 Wallet Address: 0x00000000000000000000000000000000
 
-### Billing details
+### Payment details
 
 1. **Wallet Creation:**
    * When the user creates an account, a wallet is automatically generated.
