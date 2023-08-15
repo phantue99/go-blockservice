@@ -456,11 +456,8 @@ func appendFiles(files []string, fileRecordId string) ([]File, uint64, error) {
 	return response.File, lastSize, nil
 }
 
-var lock = sync.RWMutex{}
 
 func (s *blockService) AddBlocks(ctx context.Context, bs []blocks.Block) error {
-	lock.Lock()
-	defer lock.Unlock()
 	ctx, span := internal.StartSpan(ctx, "blockService.AddBlocks")
 	defer span.End()
 
