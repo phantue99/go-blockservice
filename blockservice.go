@@ -119,7 +119,8 @@ func InitBlockService(uploaderURL, pinningServiceURL, _apiKey string, _isDedicat
 		return errors.New("error: empty url or api key")
 	}
 	rdb = redis.NewClusterClient(&redis.ClusterOptions{
-		Addrs: []string{"10.148.0.23:7001", "10.148.0.23:7002", "10.148.0.23:7003", "10.148.0.23:7004", "10.148.0.23:7005", "10.148.0.23:7006"},
+		// Addrs: []string{"10.148.0.23:7001", "10.148.0.23:7002", "10.148.0.23:7003", "10.148.0.23:7004", "10.148.0.23:7005", "10.148.0.23:7006"},
+		Addrs: []string{"10.0.0.185:7001", "10.0.0.185:7002", "10.0.0.185:7003", "10.0.0.185:7004", "10.0.0.185:7005", "10.0.0.185:7006"},
 	})
 
 	ctx := context.Background()
@@ -276,7 +277,7 @@ func AddBlock(ctx context.Context, o blocks.Block, checkFirst bool) error {
 			return fmt.Errorf("failed to upload file and get file record ID: %w", err)
 		}
 	} else {
-		files, lastSize, err = appendFiles([]string{tmpFile.Name()}, fileRecordID)
+		files, lastSize, err = appendFiles([]string{tmpFile.Name()}, fileRecordID, userID)
 		if err != nil {
 			fileRecordID, files, lastSize, err = uploadFiles([]string{tmpFile.Name()}, userID)
 			if err != nil {
@@ -378,6 +379,7 @@ func uploadFiles(files []string, userID string) (string, []File, uint64, error) 
 		reqBody, _ := json.Marshal(map[string]interface{}{
 			"user_id":        userID,
 			"file_record_id": fileRecordID,
+			"size": size,
 		})
 		reqCreateRecord, _ := http.NewRequest("POST", apiUrl, bytes.NewBuffer(reqBody))
 		reqCreateRecord.Header.Set("blockservice-API-Key", apiKey)
@@ -389,7 +391,7 @@ func uploadFiles(files []string, userID string) (string, []File, uint64, error) 
 	}
 	return fileRecordID, response.ZipReader.File, size, nil
 }
-func appendFiles(files []string, fileRecordId string) ([]File, uint64, error) {
+func appendFiles(files []string, fileRecordId string, userID string) ([]File, uint64, error) {
 	// Create new multipart form writer
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
@@ -451,6 +453,23 @@ func appendFiles(files []string, fileRecordId string) ([]File, uint64, error) {
 
 		lastSize = response.File[lastFileIndex].Offset + response.File[lastFileIndex].UncompressedSize64
 
+	}
+
+	if userID != "" {
+		// Call the API to create a new file record
+		apiUrl := fmt.Sprintf("%s/api/filerecords/", pinningService)
+		reqBody, _ := json.Marshal(map[string]interface{}{
+			"user_id":        userID,
+			"file_record_id": fileRecordId,
+			"size": lastSize,
+		})
+		reqCreateRecord, _ := http.NewRequest("POST", apiUrl, bytes.NewBuffer(reqBody))
+		reqCreateRecord.Header.Set("blockservice-API-Key", apiKey)
+		reqCreateRecord.Header.Set("Content-Type", "application/json")
+		_, err = client.Do(reqCreateRecord)
+		if err != nil {
+			return nil, 0, fmt.Errorf("failed to create file record: %w", err)
+		}
 	}
 
 	return response.File, lastSize, nil
@@ -539,7 +558,7 @@ func AddBlocks(ctx context.Context, bs []blocks.Block, checkFirst bool) ([]block
 			return nil, fmt.Errorf("failed to upload file and get file record ID: %w", err)
 		}
 	} else {
-		files, lastSize, err = appendFiles(tempFiles, fileRecordID)
+		files, lastSize, err = appendFiles(tempFiles, fileRecordID, userID)
 		if err != nil {
 			fileRecordID, files, lastSize, err = uploadFiles(tempFiles, userID)
 			if err != nil {
