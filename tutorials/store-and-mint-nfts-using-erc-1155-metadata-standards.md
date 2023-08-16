@@ -56,7 +56,7 @@ const options = {
 };
 // Store the NFT assets and metadata
 async function storeNFT() {
-  const result = await client.pinNft(metadata, undefined, readableStreamForFile, options)
+  const result = await client.pinNft(undefined, metadata, readableStreamForFile, options)
   console.log('Result: ', result)
 }
 
