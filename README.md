@@ -4,7 +4,7 @@ description: >-
   started with our W3IPFS service. Let's dive in!
 ---
 
-# 🧑💻 Quick start
+# 🧑💻 🧑💻 Quick start
 
 ## Introduction
 
@@ -110,13 +110,11 @@ client.pinFolderToIPFS('./folder', options).then((result) => {
 
 To pin NFT using the AIOZ W3IPFS service
 
-
-
 ```javascript
 const readableStreamForMetadata = fs.createReadStream('./sample.json');
 const readableStreamForFile = fs.createReadStream('./test.png');
 
-client.pinNft(undefined, readableStreamForMetadata, readableStreamForFile, options)
+client.pinNft(readableStreamForFile, undefined, readableStreamForMetadata, options)
 .then((result) => {
     console.log(result);
 }).catch((err) => {
