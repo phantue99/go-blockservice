@@ -1,7 +1,7 @@
 ---
 description: >-
   Our aim is to provide you with a delightful experience. Here are some
-  frequently asked questions to help you better understand w3ipfs Pinning
+  frequently asked questions to help you better understand W3IPFS Pinning
   Service:
 ---
 
