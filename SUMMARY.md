@@ -24,6 +24,6 @@
   * [Dedicated Gateways](gateway/dedicated-gateways.md)
 * [✊ SDK](sdk.md)
 * [🥳 NFTs](nfts.md)
-* [💰 Paymentt](payment.md)
+* [💰 Payment](payment.md)
 * [🤝 Limit](limit.md)
 * [💪 FAQ](faq.md)
