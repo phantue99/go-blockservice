@@ -1,6 +1,6 @@
 # Table of contents
 
-* [🧑💻 🧑💻 Quick start](README.md)
+* [🧑💻 Quick start](README.md)
 * [🤔 Concepts](concepts/README.md)
   * [Decentralized Storage](concepts/decentralized-storage.md)
   * [IPFS Storage](concepts/ipfs-protocol.md)
