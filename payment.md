@@ -2,7 +2,7 @@
 
 ### Wallet Information
 
-Wallet Address: 0x0000000000000000000000000000000011111
+Wallet Address: 0x00000000000000000000000000000000
 
 ### Payment details
 
