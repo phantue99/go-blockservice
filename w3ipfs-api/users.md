@@ -130,7 +130,7 @@ func main() {
 
 Edit the first name and last name of the user's profile
 
-The request body when edit will look like this:&#x20;
+The request body when edited will look like this:
 
 ```
 {
@@ -148,11 +148,11 @@ The request body when edit will look like this:&#x20;
 JWT
 {% endswagger-parameter %}
 
-{% swagger-parameter in="body" name="first_name" %}
+{% swagger-parameter in="body" name="first_name" required="false" %}
 First name
 {% endswagger-parameter %}
 
-{% swagger-parameter in="body" name="last_name" %}
+{% swagger-parameter in="body" name="last_name" required="false" %}
 Last name
 {% endswagger-parameter %}
 
