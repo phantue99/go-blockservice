@@ -19,7 +19,7 @@ Pinning your content with W3IPFS offers you peace of mind, knowing that your val
 
 ## What is the pricing model of W3IPFS?
 
-To explore the pricing details for w3ipfs Pinning Service, please refer to our dedicated pricing page.
+To explore the pricing details for W3IPFS Pinning Service, please refer to our dedicated pricing page.
 
 ## **We value your feedback!**
 
