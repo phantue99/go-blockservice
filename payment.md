@@ -29,15 +29,4 @@ Wallet Address: 0x00000000000000000000000000000000
    * Your daily usage history, including storage and bandwidth consumption, will be available in the [**History Usage**](https://w3ipfs.storage/dashboard/payment?tag=history-usage\&page=1) tab.
    * This will provide you with a breakdown of the usage and associated costs for each day.
 
-### Terms and Conditions
-
-1. Please ensure that the deposit is made accurately to the provided wallet address. Any incorrect transactions may result in the loss of funds.
-2. The credited amount will be based on the conversion rate at the time of deposit and may vary depending on market fluctuations.
-3. Billing is calculated hourly based on the usage of storage and bandwidth.
-   * Storage costs: **$4 per 1TB per month** divided by the number of hours in a month.
-   * Bandwidth costs: **$7 per 1TB per month** divided by the number of hours in a month.
-4. Your daily usage history, including storage and bandwidth consumption, will be available in the "History Usage" tab.
-5. In case of any billing inquiries or assistance, please contact our customer support team at \[Customer Support Contact].
-6. All transactions and payments are subject to our terms and conditions as outlined in the terms of the service agreement.
-
 Thank you for choosing our services!
