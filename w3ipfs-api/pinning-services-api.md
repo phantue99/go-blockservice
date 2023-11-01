@@ -6,13 +6,13 @@ The Pinning Services API is a standardized specification for developers who want
 
 ### Endpoint
 
-W3IPFS users looking to utilize the IPFS Pinning Services API can do so from the dedicated API endpoint: [`https://api-ipfs.attoaioz.cyou/api/psa/`](https://api-ipfs.attoaioz.cyou/api/psa/)
+W3IPFS users looking to utilize the IPFS Pinning Services API can do so from the dedicated API endpoint: [https://api.w3ipfs.storage/api/psa/](https://api.w3ipfs.storage/api/psa/)
 
 ## Authentication
 
 To authenticate with W3IPFS through the Pinning Services API spec, you'll need to obtain an `access_token`. To obtain an access token for authentication with the W3ipfs Pinning Services API, you can use Postman to make a POST request to the following API endpoint:
 
-{% swagger method="post" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/auth/login" summary="" %}
+{% swagger method="post" path="" baseUrl="https://api.w3ipfs.storage/api/auth/login" summary="" %}
 {% swagger-description %}
 
 {% endswagger-description %}
@@ -43,7 +43,7 @@ To use the W3IPFS Pinning Service with the [IPFS CLI](https://docs.ipfs.io/refer
 1. Add W3IPFS credentials: Before you can start pinning to the W3IPFS Pinning Service, you need to add your authentication credentials. Replace `YOUR_AUTH_JWT` in the following command with your actual JWT.
 
 ```
-ipfs pin remote service add w3ipfs https://api-ipfs.attoaioz.cyou/api/psa/ YOUR_AUTH_JWT
+ipfs pin remote service add w3ipfs https://api.w3ipfs.storage/api/psa/ YOUR_AUTH_JWT
 ```
 
 2. Pin a CID to W3IPFS: Once you have added the service, you can pin a CID to W3IPFS using the `ipfs pin remote add` command. Replace `YOUR_CID` with the CID you want to pin.

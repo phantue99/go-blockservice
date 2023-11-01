@@ -24,14 +24,14 @@ Remember, the process of finding the IPFS address may vary depending on the plat
 W3IPFS provides a reliable and efficient IPFS pinning service that allows you to securely store and access your IPFS data. As part of our service, we offer two types of gateway options: public gateways and dedicated gateways.
 
 1. Public Gateways:
-   * Gateway URL: [https://gateway-ipfs.attoaioz.cyou/ipfs/](https://gateway-ipfs.attoaioz.cyou/ipfs/)
+   * Gateway URL: [https://gateway.w3ipfs.storage/ipfs/](https://gateway.w3ipfs.storage/ipfs/)
 
 Our public gateway allows you to access IPFS content using the HTTP protocol. To retrieve content, simply replace the `ipfs://` prefix in your IPFS address with the public gateway URL. For example, if you have an IPFS address `ipfs://<CID>`, you can access the content using the following URL: `https://gateway-ipfs.attoaioz.cyou/ipfs/<CID>`. This URL will take you to the desired IPFS content.
 
 2. Dedicated Gateways:
-   * Gateway URL: [https://dedicated-gateway-ipfs.attoaioz.cyou/ipfs/](https://dedicated-gateway-ipfs.attoaioz.cyou/ipfs/)
+   * Gateway URL: [https://dedicated-gateway.w3ipfs.storage/ipfs/](https://dedicated-gateway.w3ipfs.storage/ipfs/)
 
-In addition to our public gateway, we offer dedicated gateways for users who require enhanced performance and reliability. These gateways are optimized to handle your specific IPFS needs. To use a dedicated gateway, replace the `ipfs://` prefix in your IPFS address with the dedicated gateway URL. For example, if your IPFS address is `ipfs://<CID>`, you can access the content using the following URL: `https://dedicated-gateway-ipfs.attoaioz.cyou/ipfs/<CID>`.
+In addition to our public gateway, we offer dedicated gateways for users who require enhanced performance and reliability. These gateways are optimized to handle your specific IPFS needs. To use a dedicated gateway, replace the `ipfs://` prefix in your IPFS address with the dedicated gateway URL. For example, if your IPFS address is `ipfs://<CID>`, you can access the content using the following URL: `https://dedicated-gatewa``y.w3ipfs.storage/ipfs/<CID>`.
 
 Using either the public or dedicated gateway, you can easily retrieve IPFS content by simply modifying the URL. This way, you can seamlessly integrate IPFS into your web applications and provide a smooth browsing experience for your users.
 
@@ -67,7 +67,7 @@ Replace YOUR\_CID with the CID you found above, and FILENAME with your preferred
 If you don't have IPFS running locally, you can use the following curl command to export a CAR using the W3IPFS gateway:
 
 ```url
-curl -X GET 'https://gateway-ipfs.attoaioz.cyou/ipfs/{CID}/?format=car' --output FILENAME.car
+curl -X GET 'https://gateway.w3ipfs.storage/ipfs/{CID}/?format=car' --output FILENAME.car
 ```
 
 Replace {CID} with the CID you found above, and FILENAME with your desired name for the archive file. This command will download the CAR file from the W3IPFS gateway.

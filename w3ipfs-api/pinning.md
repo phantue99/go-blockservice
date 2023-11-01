@@ -10,7 +10,7 @@ Example metadata:
 {"name": "sample name", "keyvalues":{"key1": "value1","key2": "value2"}}
 ```
 
-{% swagger method="post" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/pinning" summary="" %}
+{% swagger method="post" path="" baseUrl="https://api.w3ipfs.storage/api/pinning" summary="" %}
 {% swagger-description %}
 
 {% endswagger-description %}
@@ -19,7 +19,7 @@ Example metadata:
 PINNING-API-KEY
 {% endswagger-parameter %}
 
-{% swagger-parameter in="body" name="metadata" %}
+{% swagger-parameter in="body" name="metadata" required="false" %}
 Optional stringified object
 {% endswagger-parameter %}
 
@@ -61,7 +61,7 @@ Read stream representing the file
 {% tabs %}
 {% tab title="cURL" %}
 ```
-curl --location --request POST 'https://api-ipfs.attoaioz.cyou/api/pinning/' \
+curl --location --request POST 'https://api.w3ipfs.storage/api/pinning/' \
 --header 'pinning_api_key: KEY' \
 --header 'pinning_secret_key: SECRET' \
 --form 'file=@"/test.png"'
@@ -78,7 +78,7 @@ data.append('file', fs.createReadStream('/test.png'));
 
 var config = {
   method: 'post',
-  url: 'https://api-ipfs.attoaioz.cyou/api/pinning/',
+  url: 'https://api.w3ipfs.storage/api/pinning/',
   headers: { 
     'pinning_api_key': 'KEY',
     'pinning_secret_key': 'SECRET', 
@@ -102,7 +102,7 @@ axios(config)
 ```python
 import requests
 
-url = "https://api-ipfs.attoaioz.cyou/api/pinning/"
+url = "https://api.w3ipfs.storage/api/pinning/"
 
 payload={}
 files=[
@@ -137,7 +137,7 @@ import (
 
 func main() {
 
-  url := "https://api-ipfs.attoaioz.cyou/api/pinning/"
+  url := "https://api.w3ipfs.storage/api/pinning/"
   method := "POST"
 
   payload := &bytes.Buffer{}
@@ -190,7 +190,7 @@ func main() {
 
 ## Pin by CID
 
-The request body when pin a file by CID will look like this:&#x20;
+The request body when pin a file by CID will look like this:
 
 ```
 {
@@ -205,7 +205,7 @@ The request body when pin a file by CID will look like this:&#x20;
 }
 ```
 
-{% swagger method="post" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/pinning/pinByHash" summary="" %}
+{% swagger method="post" path="" baseUrl="https://api.w3ipfs.storage/api/pinning/pinByHash" summary="" %}
 {% swagger-description %}
 
 {% endswagger-description %}
@@ -222,7 +222,7 @@ PINNING-SECRET-KEY
 CID
 {% endswagger-parameter %}
 
-{% swagger-parameter in="body" name="metadata" %}
+{% swagger-parameter in="body" name="metadata" required="false" %}
 
 {% endswagger-parameter %}
 
@@ -254,7 +254,7 @@ CID
 {% tabs %}
 {% tab title="cURL" %}
 ```
-curl --location --request POST 'https://api-ipfs.attoaioz.cyou/api/pinning/pinByHash' \
+curl --location --request POST 'https://api.w3ipfs.storage/api/pinning/pinByHash' \
 --header 'pinning_api_key: KEY' \
 --header 'pinning_secret_key: SECRET' \
 --header 'Content-Type: application/json' \
@@ -279,7 +279,7 @@ var data = JSON.stringify({
 
 var config = {
   method: 'post',
-  url: 'https://api-ipfs.attoaioz.cyou/api/pinning/pinByHash',
+  url: 'https://api.w3ipfs.storage/api/pinning/pinByHash',
   headers: { 
     'pinning_api_key': 'KEY', 
     'pinning_secret_key': 'SECRET', 
@@ -304,7 +304,7 @@ axios(config)
 import requests
 import json
 
-url = "https://api-ipfs.attoaioz.cyou/api/pinning/pinByHash"
+url = "https://api.w3ipfs.storage/api/pinning/pinByHash"
 
 payload = json.dumps({
   "hash_to_pin": "Qmc1135ziMvmFG534i75E8HpJoLqzLzgKBxfjBV9cBsMAs",
@@ -338,7 +338,7 @@ import (
 
 func main() {
 
-  url := "https://api-ipfs.attoaioz.cyou/api/pinning/pinByHash"
+  url := "https://api.w3ipfs.storage/api/pinning/pinByHash"
   method := "POST"
 
   payload := strings.NewReader(`{
@@ -382,7 +382,7 @@ func main() {
 
 This code snippet makes a GET request to the `/pinning/{pinId}` endpoint, where `{pinId}` is the ID of the pin you want to retrieve information for.
 
-{% swagger method="get" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/pinning/:pinId" summary="" %}
+{% swagger method="get" path="" baseUrl="https://api.w3ipfs.storage/api/pinning/:pinId" summary="" %}
 {% swagger-description %}
 
 {% endswagger-description %}
@@ -427,12 +427,10 @@ pinId
 {% endswagger-response %}
 {% endswagger %}
 
-
-
 {% tabs %}
 {% tab title="cURL" %}
 ```
-curl --location --request GET 'https://api-ipfs.attoaioz.cyou/api/pinning/3c3fec2a-ca65-4b8e-bcf3-c8e2ceaa23d2' \
+curl --location --request GET 'https://api.w3ipfs.storage/api/pinning/3c3fec2a-ca65-4b8e-bcf3-c8e2ceaa23d2' \
 --header 'pinning_api_key: KEY' \
 --header 'pinning_secret_key: SECRET' 
 ```
@@ -444,7 +442,7 @@ var axios = require('axios');
 
 var config = {
   method: 'get',
-  url: 'https://api-ipfs.attoaioz.cyou/api/pinning/3c3fec2a-ca65-4b8e-bcf3-c8e2ceaa23d2',
+  url: 'https://api.w3ipfs.storage/api/pinning/3c3fec2a-ca65-4b8e-bcf3-c8e2ceaa23d2',
   headers: { 
     'pinning_api_key': 'KEY', 
     'pinning_secret_key': 'SECRET'
@@ -466,7 +464,7 @@ axios(config)
 ```python
 import requests
 
-url = "https://api-ipfs.attoaioz.cyou/api/pinning/3c3fec2a-ca65-4b8e-bcf3-c8e2ceaa23d2"
+url = "https://api.w3ipfs.storage/api/pinning/3c3fec2a-ca65-4b8e-bcf3-c8e2ceaa23d2"
 
 payload = ""
 headers = {
@@ -494,7 +492,7 @@ import (
 
 func main() {
 
-  url := "https://api-ipfs.attoaioz.cyou/api/pinning/3c3fec2a-ca65-4b8e-bcf3-c8e2ceaa23d2"
+  url := "https://api.w3ipfs.storage/api/pinning/3c3fec2a-ca65-4b8e-bcf3-c8e2ceaa23d2"
   method := "GET"
 
   client := &http.Client {
@@ -528,9 +526,7 @@ func main() {
 
 ## List Pins of User
 
-
-
-{% swagger method="get" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/pinning/pins/" summary="" %}
+{% swagger method="get" path="" baseUrl="https://api.w3ipfs.storage/api/pinning/pins/" summary="" %}
 {% swagger-description %}
 
 {% endswagger-description %}
@@ -543,23 +539,23 @@ PINNING-API-KEY
 PINNING-SECRET-KEY
 {% endswagger-parameter %}
 
-{% swagger-parameter in="query" name="offset" %}
+{% swagger-parameter in="query" name="offset" required="false" %}
 (default 0)
 {% endswagger-parameter %}
 
-{% swagger-parameter in="query" name="limit" %}
+{% swagger-parameter in="query" name="limit" required="false" %}
 (default 10)
 {% endswagger-parameter %}
 
-{% swagger-parameter in="query" name="pinned" %}
+{% swagger-parameter in="query" name="pinned" required="false" %}
 Filter by pinned status (options: all, true, false) (default all)
 {% endswagger-parameter %}
 
-{% swagger-parameter in="query" name="sortBy" %}
-Field to sort by (options: created_at, size, name). Defaults to created_at.
+{% swagger-parameter in="query" name="sortBy" required="false" %}
+Field to sort by (options: created\_at, size, name). Defaults to created\_at.
 {% endswagger-parameter %}
 
-{% swagger-parameter in="query" name="sortOrder" %}
+{% swagger-parameter in="query" name="sortOrder" required="false" %}
 Sort direction (options: ASC, DESC). Defaults to DESC.
 {% endswagger-parameter %}
 
@@ -601,7 +597,7 @@ Sort direction (options: ASC, DESC). Defaults to DESC.
 {% tabs %}
 {% tab title="cURL" %}
 ```
-curl --location --request GET 'https://api-ipfs.attoaioz.cyou/api/pinning/pins/?offset=0&limit=10&pinned=true&sortBy=name&sortOrder=ASC' \
+curl --location --request GET 'https://api.w3ipfs.storage/api/pinning/pins/?offset=0&limit=10&pinned=true&sortBy=name&sortOrder=ASC' \
 --header 'pinning_api_key: KEY' \
 --header 'pinning_secret_key: SECRET'
 ```
@@ -613,7 +609,7 @@ var axios = require('axios');
 
 var config = {
   method: 'get',
-  url: 'https://api-ipfs.attoaioz.cyou/api/pinning/pins/?offset=0&limit=10&pinned=true&sortBy=name&sortOrder=ASC',
+  url: 'https://api.w3ipfs.storage/api/pinning/pins/?offset=0&limit=10&pinned=true&sortBy=name&sortOrder=ASC',
   headers: { 
     'pinning_api_key': 'KEY', 
     'pinning_secret_key': 'SECRET'
@@ -634,7 +630,7 @@ axios(config)
 ```python
 import requests
 
-url = "https://api-ipfs.attoaioz.cyou/api/pinning/pins/?offset=0&limit=10&pinned=true&sortBy=name&sortOrder=ASC"
+url = "https://api.w3ipfs.storage/api/pinning/pins/?offset=0&limit=10&pinned=true&sortBy=name&sortOrder=ASC"
 
 payload={}
 headers = {
@@ -661,7 +657,7 @@ import (
 
 func main() {
 
-  url := "https://api-ipfs.attoaioz.cyou/api/pinning/pins/?offset=0&limit=10&pinned=true&sortBy=name&sortOrder=ASC"
+  url := "https://api.w3ipfs.storage/api/pinning/pins/?offset=0&limit=10&pinned=true&sortBy=name&sortOrder=ASC"
   method := "GET"
 
   client := &http.Client {
@@ -695,16 +691,16 @@ func main() {
 
 ## Remove Files (Unpin)
 
-{% swagger method="delete" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/pinning/unpin/:pinId" summary="" %}
+{% swagger method="delete" path="" baseUrl="https://api.w3ipfs.storage/api/pinning/unpin/:pinId" summary="" %}
 {% swagger-description %}
 
 {% endswagger-description %}
 
-{% swagger-parameter in="header" name="pinning_api_key" %}
+{% swagger-parameter in="header" name="pinning_api_key" required="false" %}
 PINNING-API-KEY
 {% endswagger-parameter %}
 
-{% swagger-parameter in="header" name="pinning_secret_key" %}
+{% swagger-parameter in="header" name="pinning_secret_key" required="false" %}
 PINNING-SECRET-KEY
 {% endswagger-parameter %}
 
@@ -741,7 +737,7 @@ pinId
 {% tabs %}
 {% tab title="cURL" %}
 ```
-curl --location --request DELETE 'https://api-ipfs.attoaioz.cyou/api/pinning/unpin/:pinId
+curl --location --request DELETE 'https://api.w3ipfs.storage/api/pinning/unpin/:pinId
 --header 'pinning_api_key: KEY' \
 --header 'pinning_secret_key: SECRET'
 ```
@@ -753,7 +749,7 @@ var axios = require('axios');
 
 var config = {
   method: 'delete',
-  url: 'https://api-ipfs.attoaioz.cyou/api/pinning/unpin/e5c4456d-5e5c-465d-a02a-3a536fc6e718',
+  url: 'https://api.w3ipfs.storage/api/pinning/unpin/e5c4456d-5e5c-465d-a02a-3a536fc6e718',
   headers: { 
     'pinning_api_key': 'KEY', 
     'pinning_secret_key': 'SECRET'
@@ -774,7 +770,7 @@ axios(config)
 ```python
 import requests
 
-url = "https://api-ipfs.attoaioz.cyou/api/pinning/unpin/e5c4456d-5e5c-465d-a02a-3a536fc6e718"
+url = "https://api.w3ipfs.storage/api/pinning/unpin/e5c4456d-5e5c-465d-a02a-3a536fc6e718"
 
 payload={}
 headers = {
@@ -800,7 +796,7 @@ import (
 
 func main() {
 
-  url := "https://api-ipfs.attoaioz.cyou/api/pinning/unpin/e5c4456d-5e5c-465d-a02a-3a536fc6e718"
+  url := "https://api.w3ipfs.storage/api/pinning/unpin/e5c4456d-5e5c-465d-a02a-3a536fc6e718"
   method := "DELETE"
 
   client := &http.Client {

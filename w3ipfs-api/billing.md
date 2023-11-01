@@ -2,9 +2,7 @@
 
 ## Retrieves historical usage data
 
-
-
-{% swagger method="get" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/billing/historyUsage" summary="" %}
+{% swagger method="get" path="" baseUrl="https://api.w3ipfs.storage/api/billing/historyUsage" summary="" %}
 {% swagger-description %}
 Retrieves historical usage data for a user based on their API key
 {% endswagger-description %}
@@ -13,7 +11,7 @@ Retrieves historical usage data for a user based on their API key
 PINNING-API-KEY
 {% endswagger-parameter %}
 
-{% swagger-parameter in="query" name="offset" %}
+{% swagger-parameter in="query" name="offset" required="false" %}
 (default: 0)
 {% endswagger-parameter %}
 
@@ -21,7 +19,7 @@ PINNING-API-KEY
 PINNING-SECRET-KEY
 {% endswagger-parameter %}
 
-{% swagger-parameter in="query" name="limit" %}
+{% swagger-parameter in="query" name="limit" required="false" %}
 (default: 10)
 {% endswagger-parameter %}
 
@@ -48,7 +46,7 @@ PINNING-SECRET-KEY
 {% tabs %}
 {% tab title="cURL" %}
 ```
-curl --location --request GET 'https://api-ipfs.attoaioz.cyou/api/billing/historyUsage?offset=0&limit=10' \
+curl --location --request GET 'https://api.w3ipfs.storage/api/billing/historyUsage?offset=0&limit=10' \
 --header 'pinning_api_key: KEY' \
 --header 'pinning_secret_key: SECRET'
 ```
@@ -60,7 +58,7 @@ var axios = require('axios');
 
 var config = {
   method: 'get',
-  url: 'https://api-ipfs.attoaioz.cyou/api/billing/historyUsage?offset=0&limit=10',
+  url: 'https://api.w3ipfs.storage/api/billing/historyUsage?offset=0&limit=10',
   headers: { 
     'pinning_api_key': 'KEY', 
     'pinning_secret_key': 'SECRET'
@@ -81,7 +79,7 @@ axios(config)
 ```python
 import requests
 
-url = "https://api-ipfs.attoaioz.cyou/api/billing/historyUsage?offset=0&limit=10"
+url = "https://api.w3ipfs.storage/api/billing/historyUsage?offset=0&limit=10"
 
 payload = ""
 headers = {
@@ -108,7 +106,7 @@ import (
 
 func main() {
 
-  url := "https://api-ipfs.attoaioz.cyou/api/billing/historyUsage?offset=0&limit=10"
+  url := "https://api.w3ipfs.storage/api/billing/historyUsage?offset=0&limit=10"
   method := "GET"
 
   client := &http.Client {
@@ -142,7 +140,7 @@ func main() {
 
 ## Retrieves top up data
 
-{% swagger method="get" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/billing/topUp" summary="" %}
+{% swagger method="get" path="" baseUrl="https://api.w3ipfs.storage/api/billing/topUp" summary="" %}
 {% swagger-description %}
 Retrieves top up data for a user based on their API key
 {% endswagger-description %}
@@ -151,11 +149,11 @@ Retrieves top up data for a user based on their API key
 PINNING-API-KEY
 {% endswagger-parameter %}
 
-{% swagger-parameter in="query" name="offset" %}
+{% swagger-parameter in="query" name="offset" required="false" %}
 (default: 0)
 {% endswagger-parameter %}
 
-{% swagger-parameter in="query" name="limit" %}
+{% swagger-parameter in="query" name="limit" required="false" %}
 (default: 10)
 {% endswagger-parameter %}
 
@@ -197,7 +195,7 @@ PINNING-SECRET-KEY
 {% tabs %}
 {% tab title="cURL" %}
 ```
-curl --location --request GET 'https://api-ipfs.attoaioz.cyou/api/billing/topUp?offset=0&limit=10' \
+curl --location --request GET 'https://api.w3ipfs.storage/api/billing/topUp?offset=0&limit=10' \
 --header 'pinning_api_key: KEY' \
 --header 'pinning_secret_key: SECRET' \
 --header 'Content-Type: application/json' \
@@ -232,7 +230,7 @@ var data = JSON.stringify({
 
 var config = {
   method: 'get',
-  url: 'https://api-ipfs.attoaioz.cyou/api/billing/topUp?offset=0&limit=10',
+  url: 'https://api.w3ipfs.storage/api/billing/topUp?offset=0&limit=10',
   headers: { 
     'pinning_api_key': 'KEY', 
     'pinning_secret_key': 'SECRET', 
@@ -256,7 +254,7 @@ axios(config)
 import requests
 import json
 
-url = "https://api-ipfs.attoaioz.cyou/api/billing/topUp?offset=0&limit=10"
+url = "https://api.w3ipfs.storage/api/billing/topUp?offset=0&limit=10"
 
 payload = json.dumps({
   "name": "test-api-key3",
@@ -294,7 +292,7 @@ import (
 
 func main() {
 
-  url := "https://api-ipfs.attoaioz.cyou/api/billing/topUp?offset=0&limit=10"
+  url := "https://api.w3ipfs.storage/api/billing/topUp?offset=0&limit=10"
   method := "GET"
 
   payload := strings.NewReader(`{
@@ -341,12 +339,12 @@ func main() {
 
 ## Get this month usage data for a user
 
-{% swagger method="get" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/billing/thisMonthUsage" summary="" %}
+{% swagger method="get" path="" baseUrl="https://api.w3ipfs.storage/api/billing/thisMonthUsage" summary="" %}
 {% swagger-description %}
 
 {% endswagger-description %}
 
-{% swagger-parameter in="query" name="offset" %}
+{% swagger-parameter in="query" name="offset" required="false" %}
 (default: 0)
 {% endswagger-parameter %}
 
@@ -354,7 +352,7 @@ func main() {
 PINNING-API-KEY
 {% endswagger-parameter %}
 
-{% swagger-parameter in="query" name="limit" %}
+{% swagger-parameter in="query" name="limit" required="false" %}
 (default: 10)
 {% endswagger-parameter %}
 
@@ -381,7 +379,7 @@ PINNING-SECRET-KEY
 {% tabs %}
 {% tab title="cURL" %}
 ```
-curl --location --request GET 'https://api-ipfs.attoaioz.cyou/api/billing/thisMonthUsage?offset=0&limit=10' \
+curl --location --request GET 'https://api.w3ipfs.storage/api/billing/thisMonthUsage?offset=0&limit=10' \
 --header 'pinning_api_key: KEY' \
 --header 'pinning_secret_key: SECRET'
 ```
@@ -393,7 +391,7 @@ var axios = require('axios');
 
 var config = {
   method: 'get',
-  url: 'https://api-ipfs.attoaioz.cyou/api/billing/thisMonthUsage?offset=0&limit=10',
+  url: 'https://api.w3ipfs.storage/api/billing/thisMonthUsage?offset=0&limit=10',
   headers: { 
     'pinning_api_key': 'KEY', 
     'pinning_secret_key': 'SECRET'
@@ -414,7 +412,7 @@ axios(config)
 ```python
 import requests
 
-url = "https://api-ipfs.attoaioz.cyou/api/billing/thisMonthUsage?offset=0&limit=10"
+url = "https://api.w3ipfs.storage/api/billing/thisMonthUsage?offset=0&limit=10"
 
 payload={}
 headers = {
@@ -440,7 +438,7 @@ import (
 
 func main() {
 
-  url := "https://api-ipfs.attoaioz.cyou/api/billing/thisMonthUsage?offset=0&limit=10"
+  url := "https://api.w3ipfs.storage/api/billing/thisMonthUsage?offset=0&limit=10"
   method := "GET"
 
   client := &http.Client {
