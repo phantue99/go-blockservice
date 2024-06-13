@@ -21,7 +21,7 @@ The metadata JSON file will look like this:
 }
 ```
 
-{% swagger method="post" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/nft/" summary="" %}
+{% swagger method="post" path="" baseUrl="https://api.w3ipfs.storage/api/nft/" summary="" %}
 {% swagger-description %}
 
 {% endswagger-description %}
@@ -38,11 +38,11 @@ PINNING-SECRET-KEY
 
 {% endswagger-parameter %}
 
-{% swagger-parameter in="body" name="metadata" type="File" %}
+{% swagger-parameter in="body" name="metadata" type="File" required="false" %}
 
 {% endswagger-parameter %}
 
-{% swagger-parameter in="query" name="cid" %}
+{% swagger-parameter in="query" name="cid" required="false" %}
 asset cid
 {% endswagger-parameter %}
 
@@ -75,7 +75,7 @@ asset cid
 {% tabs %}
 {% tab title="cURL" %}
 ```
-curl --location --request POST 'https://api-ipfs.attoaioz.cyou/api/nft/' \
+curl --location --request POST 'https://api.w3ipfs.storage/api/nft/' \
 --header 'pinning_api_key: KEY' \
 --header 'pinning_secret_key: SECRET' \
 --form 'metadata=@"/sample.json"' \
@@ -94,7 +94,7 @@ data.append('file', fs.createReadStream('/test.png'));
 
 var config = {
   method: 'post',
-  url: 'https://api-ipfs.attoaioz.cyou/api/nft/',
+  url: 'https://api.w3ipfs.storage/api/nft/',
   headers: { 
     'pinning_api_key': 'KEY', 
     'pinning_secret_key': 'SECRET', 
@@ -117,7 +117,7 @@ axios(config)
 ```python
 import requests
 
-url = "https://api-ipfs.attoaioz.cyou/api/nft/"
+url = "https://api.w3ipfs.storage/api/nft/"
 
 payload={}
 files=[
@@ -152,7 +152,7 @@ import (
 
 func main() {
 
-  url := "https://api-ipfs.attoaioz.cyou/api/nft/"
+  url := "https://api.w3ipfs.storage/api/nft/"
   method := "POST"
 
   payload := &bytes.Buffer{}
@@ -209,11 +209,9 @@ func main() {
 {% endtab %}
 {% endtabs %}
 
-## Retrieve a nft by its ID
+## Retrieve an nft by its ID
 
-
-
-{% swagger method="get" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/nft/:nftId" summary="" %}
+{% swagger method="get" path="" baseUrl="https://api.w3ipfs.storage/api/nft/:nftId" summary="" %}
 {% swagger-description %}
 
 {% endswagger-description %}
@@ -259,7 +257,7 @@ nftId
 {% tabs %}
 {% tab title="cURL" %}
 ```
-curl --location --request GET 'https://api-ipfs.attoaioz.cyou/api/nft/f0cda369-2846-414d-8e8d-8c0394113bef' \
+curl --location --request GET 'https://api.w3ipfs.storage/api/nft/f0cda369-2846-414d-8e8d-8c0394113bef' \
 --header 'pinning_api_key: KEY' \
 --header 'pinning_secret_key: SECRET'
 ```
@@ -271,7 +269,7 @@ var axios = require('axios');
 
 var config = {
   method: 'get',
-  url: 'https://api-ipfs.attoaioz.cyou/api/nft/f0cda369-2846-414d-8e8d-8c0394113bef',
+  url: 'https://api.w3ipfs.storage/api/nft/f0cda369-2846-414d-8e8d-8c0394113bef',
   headers: { 
     'pinning_api_key': 'KEY', 
     'pinning_secret_key': 'SECRET'
@@ -292,7 +290,7 @@ axios(config)
 ```python
 import requests
 
-url = "https://api-ipfs.attoaioz.cyou/api/nft/f0cda369-2846-414d-8e8d-8c0394113bef"
+url = "https://api.w3ipfs.storage/api/nft/f0cda369-2846-414d-8e8d-8c0394113bef"
 
 payload={}
 headers = {
@@ -318,7 +316,7 @@ import (
 
 func main() {
 
-  url := "https://api-ipfs.attoaioz.cyou/api/nft/f0cda369-2846-414d-8e8d-8c0394113bef"
+  url := "https://api.w3ipfs.storage/api/nft/f0cda369-2846-414d-8e8d-8c0394113bef"
   method := "GET"
 
   client := &http.Client {
@@ -352,7 +350,7 @@ func main() {
 
 ## Retrieve nfts associated with a user ID
 
-{% swagger method="get" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/nft/nfts/" summary="" %}
+{% swagger method="get" path="" baseUrl="https://api.w3ipfs.storage/api/nft/nfts/" summary="" %}
 {% swagger-description %}
 
 {% endswagger-description %}
@@ -361,11 +359,11 @@ func main() {
 PINNING-API-KEY
 {% endswagger-parameter %}
 
-{% swagger-parameter in="query" name="offset" %}
+{% swagger-parameter in="query" name="offset" required="false" %}
 (default 0)
 {% endswagger-parameter %}
 
-{% swagger-parameter in="query" name="limit" %}
+{% swagger-parameter in="query" name="limit" required="false" %}
 (default 10)
 {% endswagger-parameter %}
 
@@ -373,15 +371,15 @@ PINNING-API-KEY
 PINNING-SECRET-KEY
 {% endswagger-parameter %}
 
-{% swagger-parameter in="query" name="pinned" %}
+{% swagger-parameter in="query" name="pinned" required="false" %}
 Filter by pinned status (options: all, true, false) (default all)
 {% endswagger-parameter %}
 
-{% swagger-parameter in="query" name="sortBy" %}
-Field to sort by (options: created_at, size, name). Defaults to created_at
+{% swagger-parameter in="query" name="sortBy" required="false" %}
+Field to sort by (options: created\_at, size, name). Defaults to created\_at
 {% endswagger-parameter %}
 
-{% swagger-parameter in="query" name="sortOrder" %}
+{% swagger-parameter in="query" name="sortOrder" required="false" %}
 Sort direction (options: ASC, DESC). Defaults to DESC
 {% endswagger-parameter %}
 
@@ -419,7 +417,7 @@ Sort direction (options: ASC, DESC). Defaults to DESC
 {% tabs %}
 {% tab title="cURL" %}
 ```
-curl --location --request GET 'https://api-ipfs.attoaioz.cyou/api/nft/nfts/?offset=0&limit=10&pinned=true&sortBy=name&sortOrder=ASC' \
+curl --location --request GET 'https://api.w3ipfs.storage/api/nft/nfts/?offset=0&limit=10&pinned=true&sortBy=name&sortOrder=ASC' \
 --header 'pinning_api_key: KEY' \
 --header 'pinning_secret_key: SECRET'
 ```
@@ -431,7 +429,7 @@ var axios = require('axios');
 
 var config = {
   method: 'get',
-  url: 'https://api-ipfs.attoaioz.cyou/api/nft/nfts/?offset=0&limit=10&pinned=true&sortBy=name&sortOrder=ASC',
+  url: 'https://api.w3ipfs.storage/api/nft/nfts/?offset=0&limit=10&pinned=true&sortBy=name&sortOrder=ASC',
   headers: { 
     'pinning_api_key': 'KEY', 
     'pinning_secret_key': 'SECRET'
@@ -452,7 +450,7 @@ axios(config)
 ```python
 import requests
 
-url = "https://api-ipfs.attoaioz.cyou/api/nft/nfts/?offset=0&limit=10&pinned=true&sortBy=name&sortOrder=ASC"
+url = "https://api.w3ipfs.storage/api/nft/nfts/?offset=0&limit=10&pinned=true&sortBy=name&sortOrder=ASC"
 
 payload={}
 headers = {
@@ -478,7 +476,7 @@ import (
 
 func main() {
 
-  url := "https://api-ipfs.attoaioz.cyou/api/nft/nfts/?offset=0&limit=10&pinned=true&sortBy=name&sortOrder=ASC"
+  url := "https://api.w3ipfs.storage/api/nft/nfts/?offset=0&limit=10&pinned=true&sortBy=name&sortOrder=ASC"
   method := "GET"
 
   client := &http.Client {

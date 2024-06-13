@@ -2,11 +2,11 @@
 
 ## Generate W3IPFS API key
 
-This endpoint is used to programmatically generate W3IPFS API keys. This endpoint can only be called by using an "Admin" key. When generating new keys, specific scopes and limits can be implemented.&#x20;
+This endpoint is used to programmatically generate W3IPFS API keys. This endpoint can only be called by using an "Admin" key. When generating new keys, specific scopes and limits can be implemented.
 
 > **Make sure to record the API Secret as they will not be accessible again.**
 
-The request body when generating a W3IPFS API key will look like this:&#x20;
+The request body when generating a W3IPFS API key will look like this:
 
 ```
 {
@@ -32,7 +32,7 @@ The request body when generating a W3IPFS API key will look like this:&#x20;
 
 Notice the `name` is required. When setting the permissions, it is necessary to include all properties and sub-properties unless you are creating an admin key. If you are creating an admin key, the sub-properties can be omitted.
 
-For example, this would be a simplified body for admin key generation:&#x20;
+For example, this would be a simplified body for admin key generation:
 
 ```
 {
@@ -43,7 +43,7 @@ For example, this would be a simplified body for admin key generation:&#x20;
 }
 ```
 
-{% swagger method="post" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/apiKeys/" summary="" %}
+{% swagger method="post" path="" baseUrl="https://api.w3ipfs.storage/api/apiKeys/" summary="" %}
 {% swagger-description %}
 
 {% endswagger-description %}
@@ -56,7 +56,7 @@ JWT
 
 {% endswagger-parameter %}
 
-{% swagger-parameter in="body" name="scopes" type="" %}
+{% swagger-parameter in="body" name="scopes" type="" required="false" %}
 
 {% endswagger-parameter %}
 
@@ -77,7 +77,7 @@ JWT
 {% tabs %}
 {% tab title="cURL" %}
 ```
-curl --location --request POST 'https://api-ipfs.attoaioz.cyou/api/apiKeys/' \
+curl --location --request POST 'https://api.w3ipfs.storage/api/apiKeys/' \
 --header 'Authorization: Bearer JWT' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -127,7 +127,7 @@ var data = JSON.stringify({
 
 var config = {
   method: 'post',
-  url: 'https://api-ipfs.attoaioz.cyou/apiKeys/',
+  url: 'https://api.w3ipfs.storage/apiKeys/',
   headers: { 
     'Authorization': 'Bearer JWT', 
     'Content-Type': 'application/json'
@@ -150,7 +150,7 @@ axios(config)
 import requests
 import json
 
-url = "https://api-ipfs.attoaioz.cyou/api/apiKeys/"
+url = "https://api.w3ipfs.storage/api/apiKeys/"
 
 payload = json.dumps({
   "name": "test-api-key",
@@ -195,7 +195,7 @@ import (
 
 func main() {
 
-  url := "https://api-ipfs.attoaioz.cyou/api/apiKeys/"
+  url := "https://api.w3ipfs.storage/api/apiKeys/"
   method := "POST"
 
   payload := strings.NewReader(`{
@@ -251,7 +251,7 @@ func main() {
 
 This API allows you to retrieve a list of API keys associated with the authenticated user.
 
-{% swagger method="get" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/apiKeys/list" summary="" %}
+{% swagger method="get" path="" baseUrl="https://api.w3ipfs.storage/api/apiKeys/list" summary="" %}
 {% swagger-description %}
 
 {% endswagger-description %}
@@ -287,7 +287,7 @@ JWT
 {% tabs %}
 {% tab title="cURL" %}
 ```
-curl --location --request GET 'https://api-ipfs.attoaioz.cyou/api/apiKeys/list' \
+curl --location --request GET 'https://api.w3ipfs.storage/api/apiKeys/list' \
 --header 'Authorization: Bearer JWT' \
 ```
 {% endtab %}
@@ -298,7 +298,7 @@ var axios = require('axios');
 
 var config = {
   method: 'get',
-  url: 'https://api-ipfs.attoaioz.cyou/api/apiKeys/list',
+  url: 'https://api.w3ipfs.storage/api/apiKeys/list',
   headers: { 
     'Authorization': 'Bearer JWT'
   }
@@ -318,7 +318,7 @@ axios(config)
 ```python
 import requests
 
-url = "https://api-ipfs.attoaioz.cyou/api/apiKeys/list"
+url = "https://api.w3ipfs.storage/api/apiKeys/list"
 
 payload = ""
 headers = {
@@ -345,7 +345,7 @@ import (
 
 func main() {
 
-  url := "https://api-ipfs.attoaioz.cyou/api/apiKeys/list"
+  url := "https://api.w3ipfs.storage/api/apiKeys/list"
   method := "GET"
 
   client := &http.Client {
@@ -380,7 +380,7 @@ func main() {
 
 This API allows you to delete an API key associated with the authenticated user.
 
-{% swagger method="delete" path=":ID" baseUrl="https://api-ipfs.attoaioz.cyou/api/apiKeys/" summary="" %}
+{% swagger method="delete" path=":ID" baseUrl="https://api.w3ipfs.storage/api/apiKeys/" summary="" %}
 {% swagger-description %}
 `{ID}`
 
@@ -408,11 +408,9 @@ API key ID
 {% tabs %}
 {% tab title="cURL" %}
 ```
-curl --location --request DELETE 'https://api-ipfs.attoaioz.cyou/api/apiKeys/{ID}
+curl --location --request DELETE 'https://api.w3ipfs.storage/api/apiKeys/{ID}
 --header 'Authorization: Bearer JWT'
 ```
-
-
 {% endtab %}
 
 {% tab title="Node.js" %}
@@ -421,7 +419,7 @@ var axios = require('axios');
 
 var config = {
   method: 'delete',
-  url: 'https://api-ipfs.attoaioz.cyou/api/apiKeys/38ad2971-6be5-4dc3-ba28-890b9a86b8e9',
+  url: 'https://api.w3ipfs.storage/api/apiKeys/38ad2971-6be5-4dc3-ba28-890b9a86b8e9',
   headers: { 
     'Authorization': 'Bearer JWT'
   }
@@ -442,7 +440,7 @@ axios(config)
 ```python
 import requests
 
-url = "https://api-ipfs.attoaioz.cyou/api/apiKeys/38ad2971-6be5-4dc3-ba28-890b9a86b8e9"
+url = "https://api.w3ipfs.storage/api/apiKeys/38ad2971-6be5-4dc3-ba28-890b9a86b8e9"
 
 payload={}
 headers = {
@@ -468,7 +466,7 @@ import (
 
 func main() {
 
-  url := "https://api-ipfs.attoaioz.cyou/api/apiKeys/38ad2971-6be5-4dc3-ba28-890b9a86b8e9"
+  url := "https://api.w3ipfs.storage/api/apiKeys/38ad2971-6be5-4dc3-ba28-890b9a86b8e9"
   method := "DELETE"
 
   client := &http.Client {
@@ -503,7 +501,7 @@ func main() {
 
 This API allows you to test the authentication and communication with the Web3 IPFS API using the provided pinning API key and secret key.
 
-{% swagger method="get" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/apiKeys/testAuthentication" summary="Test your API keys and your ability to connect to the Pinning API" %}
+{% swagger method="get" path="" baseUrl="https://api.w3ipfs.storage/api/apiKeys/testAuthentication" summary="Test your API keys and your ability to connect to the Pinning API" %}
 {% swagger-description %}
 
 {% endswagger-description %}
@@ -528,7 +526,7 @@ PINNING-SECRET-KEY
 {% tabs %}
 {% tab title="cURL" %}
 ```
-curl --location --request GET 'https://api-ipfs.attoaioz.cyou/api/apiKeys/testAuthentication' \
+curl --location --request GET 'https://api.w3ipfs.storage/api/apiKeys/testAuthentication' \
 --header 'pinning_api_key: KEY' \
 --header 'pinning_secret_key: SECRET'
 ```
@@ -540,7 +538,7 @@ var axios = require('axios');
 
 var config = {
   method: 'get',
-  url: 'https://api-ipfs.attoaioz.cyou/api/apiKeys/testAuthentication',
+  url: 'https://api.w3ipfs.storage/api/apiKeys/testAuthentication',
   headers: { 
     'pinning_api_key': 'KEY', 
     'pinning_secret_key': 'SECRET'
@@ -561,7 +559,7 @@ axios(config)
 ```python
 import requests
 
-url = "https://api-ipfs.attoaioz.cyou/api/apiKeys/testAuthentication"
+url = "https://api.w3ipfs.storage/api/apiKeys/testAuthentication"
 
 payload={}
 headers = {
@@ -587,7 +585,7 @@ import (
 
 func main() {
 
-  url := "https://api-ipfs.attoaioz.cyou/api/apiKeys/testAuthentication"
+  url := "https://api.w3ipfs.storage/api/apiKeys/testAuthentication"
   method := "GET"
 
   client := &http.Client {
@@ -618,4 +616,3 @@ func main() {
 ```
 {% endtab %}
 {% endtabs %}
-

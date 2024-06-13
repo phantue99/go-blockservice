@@ -4,7 +4,7 @@
 
 This API allows you to retrieve the details of the currently authenticated user.
 
-{% swagger method="get" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/users/me" summary="" %}
+{% swagger method="get" path="" baseUrl="https://api.w3ipfs.storage/api/users/me" summary="" %}
 {% swagger-description %}
 
 {% endswagger-description %}
@@ -37,7 +37,7 @@ JWT
 {% tabs %}
 {% tab title="cURL" %}
 ```
-curl --location --request GET 'https://api-ipfs.attoaioz.cyou/api/users/me' \
+curl --location --request GET 'https://api.w3ipfs.storage/api/users/me' \
 --header 'Authorization: Bearer JWT'
 ```
 {% endtab %}
@@ -48,7 +48,7 @@ var axios = require('axios');
 
 var config = {
   method: 'get',
-  url: 'https://api-ipfs.attoaioz.cyou/api/users/me',
+  url: 'https://api.w3ipfs.storage/api/users/me',
   headers: { 
     'Authorization': 'Bearer JWT'
   }
@@ -69,7 +69,7 @@ axios(config)
 ```python
 import requests
 
-url = "https://api-ipfs.attoaioz.cyou/api/users/me"
+url = "https://api.w3ipfs.storage/api/users/me"
 
 payload={}
 headers = {
@@ -95,7 +95,7 @@ import (
 
 func main() {
 
-  url := "https://api-ipfs.attoaioz.cyou/api/users/me"
+  url := "https://api.w3ipfs.storage/api/users/me"
   method := "GET"
 
   client := &http.Client {
@@ -130,7 +130,7 @@ func main() {
 
 Edit the first name and last name of the user's profile
 
-The request body when edit will look like this:&#x20;
+The request body when edited will look like this:
 
 ```
 {
@@ -139,7 +139,7 @@ The request body when edit will look like this:&#x20;
 }
 ```
 
-{% swagger method="put" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/users/editProfile" summary="" %}
+{% swagger method="put" path="" baseUrl="https://api.w3ipfs.storage/api/users/editProfile" summary="" %}
 {% swagger-description %}
 
 {% endswagger-description %}
@@ -148,11 +148,11 @@ The request body when edit will look like this:&#x20;
 JWT
 {% endswagger-parameter %}
 
-{% swagger-parameter in="body" name="first_name" %}
+{% swagger-parameter in="body" name="first_name" required="false" %}
 First name
 {% endswagger-parameter %}
 
-{% swagger-parameter in="body" name="last_name" %}
+{% swagger-parameter in="body" name="last_name" required="false" %}
 Last name
 {% endswagger-parameter %}
 
@@ -169,7 +169,7 @@ Last name
 {% tabs %}
 {% tab title="cURL" %}
 ```
-curl --location --request PUT 'https://api-ipfs.attoaioz.cyou/api/users/editProfile' \
+curl --location --request PUT 'https://api.w3ipfs.storage/api/users/editProfile' \
 --header 'Authorization: Bearer JWT' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -189,7 +189,7 @@ var data = JSON.stringify({
 
 var config = {
   method: 'put',
-  url: 'https://api-ipfs.attoaioz.cyou/api/users/editProfile',
+  url: 'https://api.w3ipfs.storage/api/users/editProfile',
   headers: { 
     'Authorization': 'Bearer JWT', 
     'Content-Type': 'application/json'
@@ -212,7 +212,7 @@ axios(config)
 import requests
 import json
 
-url = "https://api-ipfs.attoaioz.cyou/api/users/editProfile"
+url = "https://api.w3ipfs.storage/api/users/editProfile"
 
 payload = json.dumps({
   "first_name": "First",
@@ -243,7 +243,7 @@ import (
 
 func main() {
 
-  url := "https://api-ipfs.attoaioz.cyou/api/users/editProfile"
+  url := "https://api.w3ipfs.storage/api/users/editProfile"
   method := "PUT"
 
   payload := strings.NewReader(`{

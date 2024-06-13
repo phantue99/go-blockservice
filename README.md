@@ -4,7 +4,7 @@ description: >-
   started with our W3IPFS service. Let's dive in!
 ---
 
-# 🧑💻 🧑💻 Quick start
+# 🧑💻 Quick start
 
 ## Introduction
 
@@ -20,7 +20,7 @@ Follow the step-by-step instructions below to quickly set up and start using the
 
 ### Step 1: Creating an AIOZ W3IPFS Account
 
-To begin, you need to create an AIOZ W3IPFS account. Visit the [AIOZ W3IPFS account creation page](https://ipfs.attoaioz.cyou/auth/register) and follow the provided instructions to set up your account.
+To begin, you need to create an AIOZ W3IPFS account. Visit the [AIOZ W3IPFS account creation page](https://w3ipfs.storage/auth/register) and follow the provided instructions to set up your account.
 
 <figure><img src=".gitbook/assets/ipfs-attoaioz-cyou-auth-register.png" alt=""><figcaption><p>AIOZ W3IPFS account creation page</p></figcaption></figure>
 
@@ -38,9 +38,9 @@ Once the transaction is confirmed, the status of the transaction will be display
 
 ### Step 3: Uploading a File via the Website
 
-Once you have an account, you can easily [upload files using our website](https://ipfs.attoaioz.cyou/dashboard/ipfs-files). From there, you can select the file you want to upload and initiate the upload process.&#x20;
+Once you have an account, you can easily [upload files using our website](https://w3ipfs.storage/dashboard/ipfs-files). From there, you can select the file you want to upload and initiate the upload process.
 
-Click on the "+" button located in the top right corner of the website interface. Select "Upload file".&#x20;
+Click on the "+" button located in the top right corner of the website interface. Select "Upload file".
 
 <figure><img src=".gitbook/assets/ipfs-attoaioz-cyou-dashboard-ipfs-files.png" alt=""><figcaption></figcaption></figure>
 
@@ -50,7 +50,7 @@ To upload files, drag and drop the files you want to upload from your computer d
 
 ### Step 4: Getting a Free API Key
 
-W3IPFS offers developer keys for various scenarios. The most common scenario is normal IPFS actions (pinning content, unpinning, listing content, etc). You can access and create your W3IPFS API keys here: [**W3IPFS Pinning API Keys Page**](https://ipfs.attoaioz.cyou/dashboard/api-keys)
+W3IPFS offers developer keys for various scenarios. The most common scenario is normal IPFS actions (pinning content, unpinning, listing content, etc). You can access and create your W3IPFS API keys here: [**W3IPFS Pinning API Keys Page**](https://w3ipfs.storage/dashboard/api-keys)
 
 <figure><img src=".gitbook/assets/ipfs-attoaioz-cyou-dashboard-api-keys.png" alt=""><figcaption></figcaption></figure>
 

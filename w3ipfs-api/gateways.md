@@ -1,21 +1,19 @@
-# Gateway
+# Gateways
 
 ## Get list public & dedicated gateways
 
 The IPFS API provides a list of public and dedicated gateways that you can use to access content on the IPFS network. Here is how you can retrieve the list of gateways using the provided API endpoint:
 
-
-
-{% swagger method="get" path="" baseUrl="https://api-ipfs.attoaioz.cyou/api/gateways/" summary="" %}
+{% swagger method="get" path="" baseUrl="https://api.w3ipfs.storage/api/gateways/" summary="" %}
 {% swagger-description %}
 
 {% endswagger-description %}
 
-{% swagger-parameter in="query" name="offset" %}
+{% swagger-parameter in="query" name="offset" required="false" %}
 (default 0)
 {% endswagger-parameter %}
 
-{% swagger-parameter in="query" name="limit" %}
+{% swagger-parameter in="query" name="limit" required="false" %}
 (default 10)
 {% endswagger-parameter %}
 
@@ -23,7 +21,7 @@ The IPFS API provides a list of public and dedicated gateways that you can use t
 PINNING-API-KEY
 {% endswagger-parameter %}
 
-{% swagger-parameter in="query" name="type" %}
+{% swagger-parameter in="query" name="type" required="false" %}
 Filter by type (options: Public, Dedicated, all) (default all)
 {% endswagger-parameter %}
 
@@ -56,7 +54,7 @@ PINNING-SECRET-KEY
 {% tabs %}
 {% tab title="cURL" %}
 ```
-curl --location --request GET 'https://api-ipfs.attoaioz.cyou/api/gateways/?offset=0&limit=10&type=all' \
+curl --location --request GET 'https://api.w3ipfs.storage/api/gateways/?offset=0&limit=10&type=all' \
 --header 'pinning_api_key: KEY' \
 --header 'pinning_secret_key: SECRET'
 ```
@@ -68,7 +66,7 @@ var axios = require('axios');
 
 var config = {
   method: 'get',
-  url: 'https://api-ipfs.attoaioz.cyou/api/gateways/?offset=0&limit=10&type=all',
+  url: 'https://api.w3ipfs.storage/api/gateways/?offset=0&limit=10&type=all',
   headers: { 
     'pinning_api_key': 'KEY', 
     'pinning_secret_key': 'SECRET'
@@ -90,7 +88,7 @@ axios(config)
 ```python
 import requests
 
-url = "https://api-ipfs.attoaioz.cyou/api/gateways/?offset=0&limit=10&type=all"
+url = "https://api.w3ipfs.storage/api/gateways/?offset=0&limit=10&type=all"
 
 payload={}
 headers = {
@@ -116,7 +114,7 @@ import (
 
 func main() {
 
-  url := "https://api-ipfs.attoaioz.cyou/api/gateways/?offset=0&limit=10&type=all"
+  url := "https://api.w3ipfs.storage/api/gateways/?offset=0&limit=10&type=all"
   method := "GET"
 
   client := &http.Client {
